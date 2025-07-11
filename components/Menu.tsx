@@ -34,7 +34,7 @@ export default function Menu() {
         <div>
           <Link href="/">
             <img
-              src="/images/Logo_Img/logo.png"
+              src="/images/Logo_Img/logo.svg"
               alt="Logo"
               className="max-w-[90px] md:max-w-[115px] 2xl:max-w-[150px] h-auto cursor-pointer"
             />
