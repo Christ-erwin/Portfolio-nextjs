@@ -1,14 +1,8 @@
-'use client';
 
 import { Outfit } from "next/font/google";
 import "./globals.css";
-import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
 
-import Menu from "@/components/Menu";
-import Footer from "@/components/Footer";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import AppWrapper from "@/components/AppWrapper"; // nouveau composant client
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -16,40 +10,24 @@ const outfit = Outfit({
   variable: "--font-outfit",
 });
 
+// ✅ METADATA OK ici
+export const metadata = {
+  title: "Portfolio de Christ",
+  description: "UI/UX Designer & Développeur web basé en Côte d’Ivoire",
+  icons: {
+    icon: "/favicon.ico",
+  },
+};
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
-
   return (
-    <html lang="en" className={`${outfit.variable} antialiased`}>
+    <html lang="fr" className={`${outfit.variable} antialiased`}>
       <body>
-        <Menu />
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={pathname} // Animation à chaque changement de page
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="min-h-screen flex flex-col"
-          >
-            {children}
-          </motion.div>
-        </AnimatePresence>
-        <Footer />
-        <ToastContainer
-          position="top-right"
-          autoClose={4000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          pauseOnHover
-          draggable
-          theme="light"
-        />
+        <AppWrapper>{children}</AppWrapper>
       </body>
     </html>
   );
