@@ -13,13 +13,6 @@ function Img({ src, alt, w = 280 }: { src: string; alt: string; w?: number }) {
     />
   );
 }
-function Ph({ label, h = 400 }: { label: string; h?: number }) {
-  return (
-    <div className="img-placeholder rounded-2xl w-full text-gray-400 text-xs p-4 text-center" style={{ minHeight: h }}>
-      <span className="text-3xl block mb-2">🖼️</span>{label}
-    </div>
-  );
-}
 function StepTitle({ n, title }: { n: string; title: string }) {
   return (
     <div className="flex items-center gap-3 mb-4">
