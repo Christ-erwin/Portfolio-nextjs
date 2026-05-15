@@ -9,7 +9,7 @@ export default function AboutSection2() {
         <div className="grid md:grid-cols-5 gap-10 items-start">
           <div className="md:col-span-3 flex flex-col gap-5">
             <p className="text-black text-lg leading-relaxed">
-              I&apos;m a Product Designer and Frontend Developer based in Abidjan, Côte d&apos;Ivoire. I&apos;ve spent 2+ years designing mobile and web products across fintech, smart home, real estate, and entertainment — always focused on clarity, usability, and real user impact.
+              I&apos;m a Product Designer and Frontend Developer based in Abidjan, Côte d&apos;Ivoire. I&apos;ve spent 4+ years designing mobile and web products across fintech, smart home, real estate, and entertainment — always focused on clarity, usability, and real user impact.
             </p>
             <p className="text-black/60 leading-relaxed">
               What makes my work different: I started as a developer. I&apos;ve built apps in React Native and Next.js, which means I design with implementation in mind. I understand constraints, components, and handoff. When I work with an engineering team, there are fewer surprises — and faster delivery.

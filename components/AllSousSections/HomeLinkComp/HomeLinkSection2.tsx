@@ -1,32 +1,6 @@
 import React from "react";
 import Image from "next/image";
 
-// ── Reusable placeholder image component ──────────────────────────────────────
-function ImgPlaceholder({
-  label,
-  width = 300,
-  height = 600,
-  className = "",
-}: {
-  label: string;
-  width?: number;
-  height?: number;
-  className?: string;
-}) {
-  return (
-    <div
-      className={`flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-300 bg-gray-50 text-center ${className}`}
-      style={{ width, height, minWidth: width, minHeight: height }}
-    >
-      <span className="text-4xl mb-3">🖼️</span>
-      <p className="text-gray-400 text-sm font-medium px-4">{label}</p>
-      <p className="text-gray-300 text-xs mt-1">
-        {width} × {height}px
-      </p>
-    </div>
-  );
-}
-
 // ── Section title ─────────────────────────────────────────────────────────────
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
@@ -190,10 +164,12 @@ export default function HomeLinkSection2() {
             </div>
           </div>
           <div className="flex justify-center">
-            <ImgPlaceholder
-              label="User persona visual / research insights screenshot"
+            <Image
+              src="/images/Project_Images/Details/HomeLink/personaVisuel.png"
+              alt="persona — project"
               width={280}
               height={320}
+              className="w-full max-w-[280px] h-auto rounded-2xl"
             />
           </div>
         </div>
