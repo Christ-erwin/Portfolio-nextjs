@@ -1,195 +1,139 @@
 import Image from "next/image";
 import React from "react";
 
+function Img({ src, alt, w = 280 }: { src: string; alt: string; w?: number }) {
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={w}
+      height={0}
+      style={{ width: w, height: "auto" }}
+      className="rounded-2xl"
+    />
+  );
+}
+function Ph({ label, h = 400 }: { label: string; h?: number }) {
+  return (
+    <div className="img-placeholder rounded-2xl w-full text-gray-400 text-xs p-4 text-center" style={{ minHeight: h }}>
+      <span className="text-3xl block mb-2">🖼️</span>{label}
+    </div>
+  );
+}
+function StepTitle({ n, title }: { n: string; title: string }) {
+  return (
+    <div className="flex items-center gap-3 mb-4">
+      <span className="step-badge">{n}</span>
+      <h2 className="text-2xl md:text-3xl font-bold text-black">{title}</h2>
+    </div>
+  );
+}
+
 export default function WaveSection2() {
   return (
-    <div className="w-full h-hauto rounded-t-[120px] flex flex-col justify-around gap-10 p-[5%]">
-      <div className="flex flex-col gap-5">
-        <div>
-          <p className="font-semibold text-4xl text-black ">Project Context </p>
+    <article className="w-full bg-white px-6 py-16">
+      <div className="max-w-4xl mx-auto flex flex-col gap-20">
+
+        {/* Overview */}
+        <div className="grid md:grid-cols-3 gap-4">
+          {[["Role","Solo UX/UI Designer"],["Type","Personal Redesign Project"],["Tools","Figma · FigJam"]].map(([k,v])=>(
+            <div key={k} className="bg-gray-50 rounded-2xl p-5">
+              <p className="text-xs text-black/40 font-semibold uppercase tracking-wider mb-1">{k}</p>
+              <p className="text-black font-semibold">{v}</p>
+            </div>
+          ))}
         </div>
-        <div>
-          <p className="text-black/50">
-            This redesign of the Wave application is a personal project aimed at
-            improving the user experience while modernizing the interface. The
-            main goal was to simplify navigation flows, enhance readability, and
-            deliver a more cohesive and modern visual identity.
+
+        {/* 01 Context */}
+        <section>
+          <StepTitle n="01" title="Project Context" />
+          <p className="text-black/60 leading-relaxed text-lg">
+            Wave is one of the most widely used mobile money apps in West Africa, with millions of users sending and receiving money daily. Despite its popularity, the app has notable UX weaknesses that create friction in everyday usage. This personal project is a full UX redesign — analyzing what&apos;s broken, defining solutions, and delivering a modern interface.
           </p>
-        </div>
-      </div>
+        </section>
 
-      <div className="flex flex-wrap justify-center md:justify-between items-center gap-3">
-        <div className="flex flex-col gap-5">
-          <div>
-            <p className="font-semibold text-4xl text-black ">
-              UX Analysis of the Existing Product{" "}
-            </p>
+        {/* 02 UX Audit */}
+        <section>
+          <StepTitle n="02" title="UX Audit — What&apos;s Broken" />
+          <p className="text-black/60 mb-6 leading-relaxed">Before designing anything, I conducted a thorough audit of the existing app to identify friction points:</p>
+          <div className="grid md:grid-cols-2 gap-4 mb-8">
+            {[
+              { icon: "🧭", title: "Complex Navigation", desc: "Core actions like sending money require too many steps. Users lose their way in long flows." },
+              { icon: "👁️", title: "Weak Visual Hierarchy", desc: "Balance, transactions, and CTAs lack visual priority. Users scan but don't find what they need." },
+              { icon: "♿", title: "Low Accessibility", desc: "Several contrast ratios fail WCAG standards, reducing readability for a large portion of users." },
+              { icon: "👥", title: "Poor Contact Management", desc: "No clear interface for finding, adding, or managing beneficiaries — a core use case." },
+              { icon: "🎨", title: "Weak Brand Identity", desc: "Inconsistent visual language across screens. No strong design system holding it together." },
+            ].map(p => (
+              <div key={p.title} className="flex gap-4 bg-gray-50 rounded-2xl p-5">
+                <span className="text-2xl flex-shrink-0">{p.icon}</span>
+                <div>
+                  <p className="font-semibold text-black mb-1">{p.title}</p>
+                  <p className="text-black/50 text-sm leading-relaxed">{p.desc}</p>
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="text-black/50 flex flex-col gap-5">
-            <p>
-              Before beginning the design phase of the Wave app redesign. I
-              conducted a thorough analysis
-              <br /> of the existing interface and user experience. Although
-              Wave is a widely used and overall functional <br />
-              financial application, several elements caught my attention as a
-              designer particularly in terms of <br />
-              ergonomics, visual hierarchy, simplicity of user flows, and
-              graphic identity. Here are the main issues
-              <br /> I identified:
-            </p>
-            <p>
-              <strong>1. Complex Navigation:</strong> Core actions like sending
-              money require too many steps, which slows down the user
-              experience.
-            </p>
-            <p>
-              <strong>2. Weak Visual Hierarchy: </strong>
-              Key information such as balance, transactions, and action buttons
-              is not clearly highlighted.
-            </p>
-            <p>
-              <strong>3. Low Accessibility in Color Palette:</strong>
-              Some contrast levels are too low, which negatively affects
-              readability.
-            </p>
-            <p>
-              <strong>4. Unintuitive Contact Management:</strong>
-              There is no clear interface for quickly finding, adding, or
-              managing beneficiaries.
-            </p>
-            <p>
-              <strong>5. Lack of Strong Visual Identity:</strong>
-              The interface lacks visual consistency and does not convey a
-              strong brand personality.
-            </p>
+          <div className="flex justify-center">
+            <div className="w-full max-w-sm">
+              <Img src="/images/Project_Images/Details/Wave/waveOld.png" alt="Wave original interface" w={300} />
+              <p className="text-center text-xs text-black/30 mt-2">Original Wave interface</p>
+            </div>
           </div>
-        </div>
+        </section>
 
-        <div>
-          <Image
-            src="/images/Project_Images/Details/Wave/waveOld.png"
-            alt="Description"
-            width={300}
-            height={0}
-            className=""
-          />
-        </div>
-      </div>
-
-      <div className="flex flex-col justify-center md:justify-between gap-3">
-        <div className="flex flex-col gap-5">
-          <div>
-            <p className="font-semibold text-4xl text-black ">
-              Proposed Solutions / UX Strategy{" "}
-            </p>
+        {/* 03 Strategy */}
+        <section>
+          <StepTitle n="03" title="UX Strategy &amp; Solutions" />
+          <p className="text-black/60 mb-6 leading-relaxed">Following the audit, I defined a user-centered approach to address each pain point:</p>
+          <div className="flex flex-col gap-4">
+            {[
+              { title: "Navigation Redesign", desc: "Restructured bottom nav to surface the 3 most-used actions (Send, Receive, Balance) within one tap. Removed unnecessary steps from the transfer flow." },
+              { title: "Visual Hierarchy System", desc: "Applied a clear typographic scale and spacing system. Balance is now the hero element; CTAs are high-contrast and prominently placed." },
+              { title: "Accessible Color Palette", desc: "Rebuilt the color system to meet WCAG AA contrast requirements across all text sizes, improving readability for all users." },
+              { title: "Beneficiary Management", desc: "Designed a dedicated contacts screen with search, recent contacts, and clear add/manage actions — reducing friction for repeat transfers." },
+              { title: "Consistent Design System", desc: "Created a component library (buttons, cards, inputs, modals) ensuring visual consistency across all screens." },
+            ].map((s, i) => (
+              <div key={s.title} className="flex gap-4 border border-gray-100 rounded-2xl p-5 hover:border-purple-200 transition-colors">
+                <span className="text-sm font-bold text-purple-400 flex-shrink-0 pt-0.5">0{i+1}</span>
+                <div>
+                  <p className="font-semibold text-black mb-1">{s.title}</p>
+                  <p className="text-black/50 text-sm leading-relaxed">{s.desc}</p>
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="text-black/50 flex flex-col gap-5">
-            <p>
-              Following the analysis of the current interface’s weaknesses, I
-              defined a user-centered approach to bring concrete improvements to
-              the overall experience. The main objective was to simplify user
-              flows, clarify information, and strengthen visual consistency —
-              all while respecting the functional nature of a mobile money
-              application.
-            </p>
+        </section>
+
+        {/* 04 Screens */}
+        <section>
+          <StepTitle n="04" title="Design Screens" />
+          <div className="flex flex-wrap justify-around gap-6 mb-6">
+            <Img src="/images/Project_Images/Details/Wave/wavaPresent1.png" alt="Wave redesign screen 1" w={180} />
+            <Img src="/images/Project_Images/Details/Wave/wavaPresent2.png" alt="Wave redesign screen 2" w={180} />
           </div>
-        </div>
-        <div className="flex flex-wrap justify-around items-center gap-3 ">
-          <Image
-            src="/images/Project_Images/Details/Wave/wavaPresent1.png"
-            alt="Description"
-            width={300}
-            height={0}
-            className=""
-          />
+          <div className="flex justify-center">
+            <div className="rounded-2xl overflow-hidden">
+              <video autoPlay loop muted playsInline className="w-full max-w-xs h-auto rounded-2xl shadow-lg">
+                <source src="https://res.cloudinary.com/docanichi/video/upload/v1752175194/waveRecord_qoi5g5.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </div>
+        </section>
 
-          <Image
-            src="/images/Project_Images/Details/Wave/wavaPresent2.png"
-            alt="Description"
-            width={300}
-            height={0}
-            className=""
-          />
-        </div>
-      </div>
-
-      <div className="text-black flex flex-wrap justify-between gap-6">
-        <div className="w-full md:w-[48%]">
-          <p>
-            <strong>1. Navigation Redesign:</strong> <br />I restructured the
-            navigation to allow quick and direct access to key actions such as
-            money transfers, balance consultation, and adding contacts. A
-            simplified navigation bar, combined with well-positioned visual
-            shortcuts, enhances the overall flow and usability of the app.
+        {/* 05 Reflection */}
+        <section>
+          <StepTitle n="05" title="Reflections" />
+          <p className="text-black/60 leading-relaxed text-lg">
+            This redesign deepened my understanding of the unique challenges of financial UX — security perception, trust signals, and accessibility. It also gave me practice building a complete design system from scratch and maintaining consistency across 20+ screens.
           </p>
-        </div>
-        <div className="w-full md:w-[48%]">
-          <p>
-            <strong>2. Clear Visual Hierarchy Implementation:</strong> <br />
-            By improving the use of contrast, element sizing, and spacing, key
-            information — such as balance, action buttons, and alerts — is now
-            more readable and immediately noticeable. Each screen has been
-            structured according to a logical visual priority order.
-          </p>
-        </div>
-      </div>
-
-      <div className="flex justify-between 2xl:justify-around items-center gap-3">
-        <div className="">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-[40vh] 2xl:w-[20vh] h-auto shadow-lg rounded-2xl"
-          >
-            <source
-              src="https://res.cloudinary.com/docanichi/video/upload/v1752175194/waveRecord_qoi5g5.mp4"
-              type="video/mp4"
-            />
-            Your browser does not support the video tag.
-          </video>
-        </div>
-        <div className="text-black flex-col gap-6">
-          <div className="w-fit mb-4">
-            <p>
-              <strong>1. Navigation Redesign:</strong> <br />I restructured the
-              navigation to allow quick <br />
-              and direct access to key actions such as money transfers, balance{" "}
-              <br />
-              consultation, and adding contacts. A simplified navigation bar,{" "}
-              <br />
-              combined with well-positioned visual shortcuts, enhances the
-              overall flow and usability of the app.
+          <div className="mt-6 bg-purple-50 border-l-4 border-purple-400 p-5 rounded-r-2xl">
+            <p className="text-purple-800 text-sm italic font-medium">
+              &ldquo;The best fintech UX is the one that feels invisible — the user moves money without ever feeling like they&apos;re operating software.&rdquo;
             </p>
           </div>
-          <div className="w-fit">
-            <p>
-              <strong>2. Clear Visual Hierarchy Implementation:</strong> <br />
-              By improving the use of contrast,
-              <br /> element sizing, and spacing, key information — such as
-              balance,
-              <br /> action buttons, and alerts — is now more readable and{" "}
-              <br />
-              immediately noticeable. Each screen has been structured according
-              to a logical visual priority order.
-            </p>
-          </div>
-        </div>
-      </div>
+        </section>
 
-      <div className="flex flex-col gap-5">
-        <div>
-          <p className="font-semibold text-4xl text-black ">Personal Reflections</p>
-        </div>
-        <div>
-          <p className="text-black/50">
-          This project allowed me to deepen my understanding of the challenges specific to financial
-          apps — such as secure UX, accessibility, and clarity. It also gave me the opportunity to
-          practice building a complete and consistent design system.
-          </p>
-        </div>
       </div>
-    </div>
+    </article>
   );
 }

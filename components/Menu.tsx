@@ -1,80 +1,120 @@
 "use client";
-
-import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useState, useEffect } from "react";
 import { FaArrowLeft } from "react-icons/fa6";
-import { useRouter } from "next/navigation";
 
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/projects", label: "Projects" },
+  { href: "/about", label: "About" },
+  { href: "/skills", label: "Skills" },
+  { href: "/contact", label: "Contact" },
+];
+
+const showBackButtonOn = [
+  "/projects/wave",
+  "/projects/moovyflix",
+  "/projects/gripple",
+  "/projects/foodygo",
+  "/projects/homelink",
+];
 
 export default function Menu() {
   const pathname = usePathname();
   const router = useRouter();
-
-  const menuItems = [
-    { name: "Projects", href: "/projects" },
-    { name: "Skills", href: "/skills" },
-    { name: "About", href: "/about" },
-    { name: "Contact", href: "/contact" },
-  ];
-
-   const showBackButtonOn = [
-    "/projects/wave",
-    "/projects/moovyflix",
-    "/projects/gripple",
-    "/projects/foodygo",
-  ];
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const showBackButton = showBackButtonOn.includes(pathname);
 
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", fn);
+    return () => window.removeEventListener("scroll", fn);
+  }, []);
 
   return (
-    <div className="fixed top-4 left-0 w-full z-50">
-      <div className="w-full block md:flex justify-between h-fit px-[5%] ">
-        <div>
-          <Link href="/">
-            <img
-              src="/images/Logo_Img/logo.svg"
-              alt="Logo"
-              className="max-w-[90px] md:max-w-[115px] 2xl:max-w-[150px] h-auto cursor-pointer"
-            />
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? "bg-white/90 backdrop-blur-md shadow-sm" : "bg-transparent"
+      }`}
+    >
+      <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+        <Link href="/">
+          <img
+            src="/images/Logo_Img/logo.svg"
+            alt="Logo"
+            className="h-16 w-auto"
+          />
+        </Link>
+
+        {/* Desktop */}
+        <div className="hidden md:flex items-center gap-8">
+          {links.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className={`text-sm transition-colors duration-200 ${
+                pathname === l.href
+                  ? "font-semibold text-black"
+                  : "text-black/50 hover:text-black"
+              }`}
+            >
+              {l.label}
+            </Link>
+          ))}
+          <Link href="/contact">
+            <span className="text-sm font-semibold text-white grad-bg px-5 py-2 rounded-full">
+              Hire me
+            </span>
           </Link>
         </div>
 
-        <div className="w-fit flex justify-center items-center py-4">
-          <nav
-            className="flex gap-6 px-8 py-3 rounded-full bg-white/25 backdrop-blur-md 
-            border-b-2 border-[#5DB5FF]"
-          >
-            {menuItems.map((item, index) => {
-              const isActive = pathname === item.href;
-              return (
-                <Link key={index} href={item.href}>
-                  <p
-                    className={`text-lg font-medium transition-all duration-300 ease-in-out ${
-                      isActive
-                        ? "text-transparent bg-clip-text bg-gradient-to-r from-[#FD23E3] via-[#8021E8] to-[#0619EA]"
-                        : "text-black hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-[#FD23E3] hover:via-[#8021E8] hover:to-[#0619EA]"
-                    }`}
-                  >
-                    {item.name}
-                  </p>
-                </Link>
-              );
-            })}
-          </nav>
-        </div>
+        {/* Mobile hamburger */}
+        <button
+          className="md:hidden flex flex-col gap-1.5 p-2"
+          onClick={() => setOpen(!open)}
+          aria-label="Menu"
+        >
+          <span className={`block w-5 h-0.5 bg-black transition-all duration-300 ${open ? "rotate-45 translate-y-2" : ""}`}></span>
+          <span className={`block w-5 h-0.5 bg-black transition-all duration-300 ${open ? "opacity-0" : ""}`}></span>
+          <span className={`block w-5 h-0.5 bg-black transition-all duration-300 ${open ? "-rotate-45 -translate-y-2" : ""}`}></span>
+        </button>
       </div>
+
+      {/* Back button */}
       {showBackButton && (
-      <div>
-        <div onClick={() => router.back()}
-          className="w-14 h-14 md:w-14 md:h-14 ml-[6%] mt-[1%] bg-[#FD23E3] rounded-full
-          flex justify-center items-center cursor-pointer hover:bg-[#1E1BEA] 
-          transition-colors duration-300">
+        <div
+          onClick={() => router.back()}
+          className="w-14 h-14 ml-[6%] mt-[1%] bg-[#FD23E3] rounded-full
+          flex justify-center items-center cursor-pointer hover:bg-[#1E1BEA]
+          transition-colors duration-300"
+        >
           <FaArrowLeft color="white" className="w-6 h-auto" />
         </div>
-      </div>
       )}
-    </div>
+
+      {/* Mobile menu */}
+      {open && (
+        <div className="md:hidden bg-white border-t border-gray-100 px-6 py-4 flex flex-col gap-4">
+          {links.map((l) => (
+            <Link
+              key={l.href}
+              href={l.href}
+              onClick={() => setOpen(false)}
+              className={`text-sm ${pathname === l.href ? "font-semibold text-black" : "text-black/60"}`}
+            >
+              {l.label}
+            </Link>
+          ))}
+          <Link href="/contact" onClick={() => setOpen(false)}>
+            <span className="text-sm font-semibold text-white grad-bg px-5 py-2 rounded-full inline-block">
+              Hire me
+            </span>
+          </Link>
+        </div>
+      )}
+    </nav>
   );
 }

@@ -1,30 +1,13 @@
 import React from "react";
-
 export default function AboutSection1() {
   return (
-    <div className="w-full h-max-fit flex justify-center items-center px-[5%] ">
-      <div
-        className="w-full max-w-[2028px] h-[60vh] md:h-screen bg-[#F2F8FC] md:bg-[url('/images/About_Images/AboutbgMain.jpg')] 
-        bg-cover bg-center flex justify-start items-center"
-      >
-        <div className="mb-[6%] ml-[5%] ">
-          <div>
-            <div className="mb-7">
-              <p className="text-black/50 text-lg ">Your favorite</p>
-            </div>
-            <div  className="mb-16">
-                <p className="text-transparent bg-clip-text bg-gradient-to-r 
-                from-[#FD23E3] via-[#8021E8] to-[#0619EA] text-4xl md:text-6xl 2xl:text-8xl font-bold">
-              UI/UX Designer </p>
-            </div>
-            <div>
-             <p className="text-transparent bg-clip-text bg-gradient-to-r 
-             from-[#FD23E3] via-[#8021E8] to-[#0619EA] text-4xl md:text-6xl 2xl:text-8xl font-bold">
-              Developer front-end</p>
-            </div>
-          </div>
-        </div>
+    <section className="w-full min-h-[50vh] flex items-end px-6 pb-16 pt-32 bg-[#F8F7F4]">
+      <div className="max-w-6xl w-full mx-auto">
+        <p className="section-tag">About me</p>
+        <h1 className="text-4xl md:text-6xl font-bold text-black max-w-2xl leading-tight">
+          Designer who <span className="grad-text">thinks in code</span>
+        </h1>
       </div>
-    </div>
+    </section>
   );
 }

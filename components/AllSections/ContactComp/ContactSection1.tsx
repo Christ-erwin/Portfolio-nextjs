@@ -1,31 +1,16 @@
 import React from "react";
-
 export default function ContactSection1() {
   return (
-    <div className="w-full h-max-fit flex justify-center items-center px-[5%] ">
-      <div
-        className="w-full max-w-[2028px] h-[60vh] md:h-screen bg-[#F2F8FC] md:bg-[url('/images/Contact_Images/bgCover.jpg')] 
-       bg-cover bg-center flex justify-start items-end"
-      >
-        <div className="mb-[6%] ml-[1%]  ">
-          <div>
-            <div className="mb-[40%]">
-              <p
-                className="text-transparent bg-clip-text bg-gradient-to-r 
-               from-[#FD23E3] via-[#8021E8] to-[#0619EA] text-4xl md:text-6xl 2xl:text-8xl font-bold"
-              >
-                Keep it touch{" "}
-              </p>
-            </div>
-            <div className="mb-7">
-              <p className="text-black/50 text-lg ">
-                Got a project in mind? Let&apos;s talk about it!<br />
-                I&apos;m available for freelance or full-time collaborations.
-              </p>
-            </div>
-          </div>
-        </div>
+    <section className="w-full min-h-[40vh] flex items-end px-6 pb-16 pt-32 bg-[#F8F7F4]">
+      <div className="max-w-6xl w-full mx-auto">
+        <p className="section-tag">Contact</p>
+        <h1 className="text-4xl md:text-6xl font-bold text-black max-w-2xl leading-tight">
+          Let&apos;s build something<br /><span className="grad-text">great together</span>
+        </h1>
+        <p className="text-black/50 mt-4 text-lg max-w-lg">
+          Available for remote contracts, freelance missions, and full-time roles. I typically respond within 24h.
+        </p>
       </div>
-    </div>
+    </section>
   );
 }

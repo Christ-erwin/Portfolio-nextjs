@@ -1,32 +1,17 @@
 import React from "react";
-
 export default function SkillsSection1() {
   return (
-    <div className="w-full h-max-fit flex justify-center items-center  ">
-      <div
-        className="w-full h-[60vh] md:h-[80vh] bg-[url('/images/Skills_Images/bg_Cover.jpg')] bg-cover bg-center 
-        flex justify-start items-end px-[5%]"
-      >
-        <div className="mb-[6%] ml-[1%]  ">
-          <div> 
-            <div className="mb-[20%] 2xl:mb-[40%]">
-              <p
-                className="text-transparent bg-clip-text bg-gradient-to-r 
-               from-[#FD23E3] via-[#8021E8] to-[#0619EA] text-4xl md:text-6xl 2xl:text-8xl font-bold"
-              >
-                My skills art{" "}
-              </p>
-            </div>
-            <div className="mb-7">
-              <p className="text-black/50 text-lg ">
-               With a passion for user-centered design and modern interface
-              development, I master a range of tools and<br /> technologies to
-              create effective, aesthetic and functional digital experiences.
-              </p>
-            </div>
-          </div>
-        </div>
+    <section className="w-full min-h-[50vh] flex items-end px-6 pb-16 pt-32"
+      style={{ backgroundImage: "url('/images/Skills_Images/bg_Cover.jpg')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      <div className="max-w-6xl w-full mx-auto">
+        <p className="section-tag text-white/50" style={{ color: 'rgba(255,255,255,0.5)' }}>Skills & Tools</p>
+        <h1 className="text-4xl md:text-6xl font-bold text-black max-w-xl leading-tight">
+          My <span className="grad-text">craft</span>
+        </h1>
+        <p className="text-black/50 mt-3 max-w-lg text-lg">
+          Design thinking backed by technical fluency. I speak both design and code.
+        </p>
       </div>
-    </div>
+    </section>
   );
 }
