@@ -1,99 +1,181 @@
-import Image from "next/image";
 import React from "react";
+import type { IconType } from "react-icons";
+import { LuShoppingCart, LuUtensils, LuMapPin, LuRepeat } from "react-icons/lu";
+import {
+  Snapshot,
+  StepTitle,
+  Callout,
+  Figure,
+  ConstraintList,
+  Outcomes,
+} from "@/components/CaseStudy";
 
-function Img({ src, alt, w = 280 }: { src: string; alt: string; w?: number }) {
-  return <Image src={src} alt={alt} width={w} height={0} className="rounded-2xl w-full h-auto" />;
-}
-function StepTitle({ n, title }: { n: string; title: string }) {
-  return (
-    <div className="flex items-center gap-3 mb-4">
-      <span className="step-badge">{n}</span>
-      <h2 className="text-2xl md:text-3xl font-bold text-black">{title}</h2>
-    </div>
-  );
-}
+const research: { icon: IconType; p: string }[] = [
+  {
+    icon: LuShoppingCart,
+    p: "Checkout flows run too long — users abandon at the payment step.",
+  },
+  {
+    icon: LuUtensils,
+    p: "Poor menu organisation — no clear categories, no photo for every item.",
+  },
+  {
+    icon: LuMapPin,
+    p: "Order tracking is stressful — vague ETAs, no visual progress.",
+  },
+  {
+    icon: LuRepeat,
+    p: "No easy reordering — users search from scratch every time.",
+  },
+];
+
+const solutions = [
+  {
+    t: "Category-based menu navigation",
+    d: "Starters, Mains, Desserts, Drinks — segmented with sticky tabs. No scrolling through 50 items to find one.",
+  },
+  {
+    t: "Visual-first dish cards",
+    d: "Every dish has a hero photo, a short description and the price at a glance. Good food photography is the best conversion tool.",
+  },
+  {
+    t: "Inline customisation",
+    d: "Cooking preferences, extras and modifications are handled before adding to cart — not as a confusing step at checkout.",
+  },
+  {
+    t: "One-page checkout",
+    d: "Cart summary + delivery address + payment on a single screen. Fewer steps, lower abandonment.",
+  },
+  {
+    t: "Live order tracking",
+    d: "A visual tracker (Confirmed → Preparing → On the way → Delivered) with a real-time ETA. Less anxiety, fewer support messages.",
+  },
+  {
+    t: "Smart reordering",
+    d: '"Order again" on past orders, saved favourites, and frequent items surfaced on the home screen.',
+  },
+];
+
+const screens = [
+  { src: "/images/Project_Images/Details/Foodygo/foodygoReal1.png", label: "Home & Menu" },
+  { src: "/images/Project_Images/Details/Foodygo/foodygoReal2.png", label: "Dish Detail" },
+  { src: "/images/Project_Images/Details/Foodygo/foodygoReal3.png", label: "Cart & Checkout" },
+  { src: "/images/Project_Images/Details/Foodygo/foodygoReal4.png", label: "Order Tracking" },
+  { src: "/images/Project_Images/Details/Foodygo/foodygoReal5.png", label: "Profile" },
+];
 
 export default function FoodygoSection2() {
   return (
-    <article className="w-full bg-white px-6 py-16">
+    <article className="w-full bg-surface px-6 py-16">
       <div className="max-w-4xl mx-auto flex flex-col gap-20">
-
-        <div className="grid md:grid-cols-3 gap-4">
-          {[["Role","Full UX/UI Design · Visual Identity"],["Type","Personal Concept Project"],["Tools","Figma · FigJam"]].map(([k,v])=>(
-            <div key={k} className="bg-gray-50 rounded-2xl p-5">
-              <p className="text-xs text-black/40 font-semibold uppercase tracking-wider mb-1">{k}</p>
-              <p className="text-black font-semibold">{v}</p>
-            </div>
-          ))}
-        </div>
+        <Snapshot
+          role="Solo — brand identity, UX, UI, prototype"
+          timeline="~4 weeks, self-initiated"
+          type="Concept project (fictional restaurant)"
+          platform="Mobile (iOS & Android)"
+          status="Designed & prototyped · not shipped"
+          links={[
+            { kind: "prototype", href: "#" /* TODO: Figma prototype URL */ },
+          ]}
+        />
 
         <section>
-          <StepTitle n="01" title="Project Context" />
-          <p className="text-black/60 text-lg leading-relaxed">
-            FoodyGo is a restaurant app concept for a fictional local restaurant looking to digitize its service. Beyond just design, this project includes full visual identity work — logo, color palette, typography — making it a brand-to-product exercise. The goal: make food ordering feel effortless, joyful, and fast.
+          <StepTitle n="01" title="Context" />
+          <p className="text-ink-muted text-lg leading-relaxed">
+            FoodyGo is a self-initiated concept: an ordering app for a fictional
+            local restaurant going digital. I ran it as a brand-to-product
+            exercise — logo, palette and typography first, then the product — so
+            every screen decision traces back to a defined identity. The goal:
+            make ordering feel effortless, fast and a little joyful.
           </p>
         </section>
 
         <section>
-          <StepTitle n="02" title="User Research" />
-          <p className="text-black/60 mb-6">I analyzed 3 popular food ordering apps (Uber Eats, Deliveroo, local competitors) and identified the key friction points users complain about:</p>
+          <StepTitle n="02" title="Constraints & scope" />
+          <ConstraintList
+            items={[
+              "Solo, ~4 weeks — brand identity plus a shippable MVP scope.",
+              "In scope: browse menu, dish detail + customisation, cart, one-page checkout, order tracking, profile & reorder.",
+              "Out of scope: multi-restaurant marketplace, courier app, loyalty program, in-app chat.",
+              "Single restaurant, single city — no location picker or delivery-zone logic.",
+              "Competitor analysis of 3 delivery apps stands in for primary research on this pass.",
+            ]}
+          />
+        </section>
+
+        <section>
+          <StepTitle n="03" title="Research" />
+          <p className="text-ink-muted mb-6">
+            I analysed 3 delivery apps (Uber Eats, Deliveroo, a local competitor)
+            and pulled out the friction users complain about most:
+          </p>
           <div className="grid md:grid-cols-2 gap-4">
-            {[
-              { icon: "🛒", p: "Checkout flow too long — users abandon at payment step." },
-              { icon: "🍽️", p: "Poor menu organization — no clear categories, no photos for every item." },
-              { icon: "📍", p: "Order tracking is stressful — vague ETAs, no visual progress." },
-              { icon: "🔁", p: "No easy reordering — users must search from scratch every time." },
-            ].map((p,i) => (
-              <div key={i} className="flex gap-4 bg-gray-50 rounded-2xl p-5">
-                <span className="text-2xl flex-shrink-0">{p.icon}</span>
-                <p className="text-black/60 text-sm leading-relaxed">{p.p}</p>
+            {research.map(({ icon: Icon, p }) => (
+              <div key={p} className="flex gap-4 bg-surface-alt rounded-2xl p-5">
+                <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-brand-tint text-brand flex-shrink-0">
+                  <Icon className="w-5 h-5" aria-hidden="true" />
+                </span>
+                <p className="text-ink-muted text-sm leading-relaxed">{p}</p>
               </div>
             ))}
           </div>
         </section>
 
         <section>
-          <StepTitle n="03" title="Visual Identity" />
-          <div className="bg-gray-50 rounded-2xl p-6">
-            <p className="text-black/60 mb-4 leading-relaxed">Before designing screens, I defined the brand identity to ensure every design decision was consistent:</p>
+          <StepTitle n="04" title="Visual identity" />
+          <div className="bg-surface-alt rounded-2xl p-6">
+            <p className="text-ink-muted mb-4 leading-relaxed">
+              Before any screens, I fixed the brand so every later decision had a
+              reference:
+            </p>
             <div className="grid md:grid-cols-3 gap-4">
               <div>
-                <p className="text-xs font-bold text-black/40 uppercase tracking-wider mb-2">Color Palette</p>
+                <p className="text-xs font-bold text-ink-subtle uppercase tracking-wider mb-2">
+                  Colour palette
+                </p>
                 <div className="flex gap-2">
-                  <div className="w-10 h-10 rounded-lg bg-red-500"></div>
-                  <div className="w-10 h-10 rounded-lg bg-yellow-400"></div>
-                  <div className="w-10 h-10 rounded-lg bg-gray-900"></div>
-                  <div className="w-10 h-10 rounded-lg bg-white border border-gray-200"></div>
+                  <span className="w-10 h-10 rounded-lg bg-red-500" />
+                  <span className="w-10 h-10 rounded-lg bg-yellow-400" />
+                  <span className="w-10 h-10 rounded-lg bg-gray-900" />
+                  <span className="w-10 h-10 rounded-lg bg-white border border-line" />
                 </div>
               </div>
               <div>
-                <p className="text-xs font-bold text-black/40 uppercase tracking-wider mb-2">Tone</p>
-                <p className="text-black/60 text-sm">Warm, energetic, appetizing. Colors that make food look delicious.</p>
+                <p className="text-xs font-bold text-ink-subtle uppercase tracking-wider mb-2">
+                  Tone
+                </p>
+                <p className="text-ink-muted text-sm">
+                  Warm, energetic, appetising — colours that make food look
+                  good.
+                </p>
               </div>
               <div>
-                <p className="text-xs font-bold text-black/40 uppercase tracking-wider mb-2">Typography</p>
-                <p className="text-black/60 text-sm">Bold headlines for menu items, clean body text for descriptions and prices.</p>
+                <p className="text-xs font-bold text-ink-subtle uppercase tracking-wider mb-2">
+                  Typography
+                </p>
+                <p className="text-ink-muted text-sm">
+                  Bold headlines for dishes, clean body text for descriptions
+                  and prices.
+                </p>
               </div>
             </div>
           </div>
         </section>
 
         <section>
-          <StepTitle n="04" title="UX Solutions" />
+          <StepTitle n="05" title="Design decisions & rationale" />
           <div className="flex flex-col gap-4">
-            {[
-              { t: "Category-Based Menu Navigation", d: "Starters, Mains, Desserts, Drinks — clearly segmented with sticky tabs. No scrolling through 50 items to find what you want." },
-              { t: "Visual-First Dish Cards", d: "Every dish has a hero photo, short description, and price visible at a glance. Good food photography is the best conversion tool." },
-              { t: "Customizable Orders", d: "Cooking preferences, extras, and modifications handled inline before adding to cart — not as a confusing step at checkout." },
-              { t: "One-Page Checkout", d: "Reduced checkout to a single screen: cart summary + delivery address + payment. Minimal steps = lower abandonment rate." },
-              { t: "Live Order Tracking", d: "Visual step-by-step tracker (Confirmed → Preparing → On the way → Delivered) with real-time ETA. Reduces anxiety and support requests." },
-              { t: "Smart Reordering", d: "\"Order again\" button on past orders. Saved favorites. Frequently ordered items surfaced on the home screen." },
-            ].map((s,i) => (
-              <div key={s.t} className="flex gap-4 border border-gray-100 rounded-2xl p-5 hover:border-purple-200 transition-colors">
-                <span className="text-sm font-bold text-purple-400 flex-shrink-0 pt-0.5">0{i+1}</span>
+            {solutions.map((s, i) => (
+              <div
+                key={s.t}
+                className="flex gap-4 border border-line rounded-2xl p-5 hover:border-brand/30 transition-colors"
+              >
+                <span className="text-sm font-bold text-brand flex-shrink-0 pt-0.5">
+                  0{i + 1}
+                </span>
                 <div>
-                  <p className="font-semibold text-black mb-1">{s.t}</p>
-                  <p className="text-black/50 text-sm leading-relaxed">{s.d}</p>
+                  <p className="font-semibold text-ink mb-1">{s.t}</p>
+                  <p className="text-ink-muted text-sm leading-relaxed">{s.d}</p>
                 </div>
               </div>
             ))}
@@ -101,35 +183,48 @@ export default function FoodygoSection2() {
         </section>
 
         <section>
-          <StepTitle n="05" title="Screens" />
+          <StepTitle n="06" title="Screens" />
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {[
-              { src: "/images/Project_Images/Details/Foodygo/foodygoReal1.png", label: "Home & Menu" },
-              { src: "/images/Project_Images/Details/Foodygo/foodygoReal2.png", label: "Dish Detail" },
-              { src: "/images/Project_Images/Details/Foodygo/foodygoReal3.png", label: "Cart & Checkout" },
-              { src: "/images/Project_Images/Details/Foodygo/foodygoReal4.png", label: "Order Tracking" },
-              { src: "/images/Project_Images/Details/Foodygo/foodygoReal5.png", label: "Profile" },
-            ].map(s => (
-              <div key={s.label}>
-                <Img src={s.src} alt={s.label} w={220} />
-                <p className="text-center text-xs text-black/30 mt-2">{s.label}</p>
-              </div>
+            {screens.map((s) => (
+              <Figure key={s.label} src={s.src} alt={s.label} w={220} caption={s.label} />
             ))}
           </div>
         </section>
 
         <section>
-          <StepTitle n="06" title="Reflections" />
-          <p className="text-black/60 text-lg leading-relaxed">
-            FoodyGo gave me deep practice in e-commerce UX — particularly the psychology of conversion at each step of a purchase funnel. I learned that in food apps, the visual quality of content is as important as the UX structure. And that reducing the checkout to a single screen is often the single highest-impact UX decision you can make.
-          </p>
-          <div className="mt-6 bg-purple-50 border-l-4 border-purple-400 p-5 rounded-r-2xl">
-            <p className="text-purple-800 text-sm italic font-medium">
-              &ldquo;In food ordering, every additional step is a potential exit. My goal was to get users from &lsquo;I&apos;m hungry&rsquo; to &lsquo;order confirmed&rsquo; in under 90 seconds.&rdquo;
-            </p>
-          </div>
+          <StepTitle n="07" title="Outcomes" />
+          <Outcomes
+            criteria={[
+              "From \"I'm hungry\" to \"order confirmed\" in under 90 seconds for a repeat order.",
+              "Checkout completed on a single screen — no multi-step wizard.",
+              "Every dish card shows photo, description and price without a tap.",
+              "Reordering a past order takes 2 taps from the home screen.",
+            ]}
+            tested={[
+              "Timed prototype run of first-order and reorder tasks against the 90-second target.",
+              "Step-count comparison of the one-page checkout vs the 3 apps analysed.",
+              "Heuristic review of the tracking screen for clarity of status and ETA.",
+            ]}
+            next="Unmoderated first-click and timed-task testing with 6–8 people who order delivery weekly, focused on checkout completion and reorder discovery."
+          />
         </section>
 
+        <section>
+          <StepTitle n="08" title="Reflections & what I'd do next" />
+          <p className="text-ink-muted text-lg leading-relaxed">
+            FoodyGo gave me practice in e-commerce UX — the psychology of
+            conversion at each step of a funnel — and in running brand and
+            product together so they reinforce each other. I learned that in food
+            apps, content quality (photography) carries as much weight as
+            structure, and that collapsing checkout to one screen is often the
+            single highest-impact move. Next: the timed testing above, plus the
+            empty, error and out-of-stock states.
+          </p>
+          <Callout>
+            &ldquo;In food ordering, every extra step is a potential exit — the
+            whole design fought to remove them.&rdquo;
+          </Callout>
+        </section>
       </div>
     </article>
   );

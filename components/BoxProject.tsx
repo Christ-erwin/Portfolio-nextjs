@@ -1,5 +1,7 @@
 import React from "react";
-import Link from 'next/link';
+import Image from "next/image";
+import Link from "next/link";
+import { LuArrowRight } from "react-icons/lu";
 
 interface ProjectCardProps {
   backgroundImage: string;
@@ -7,40 +9,68 @@ interface ProjectCardProps {
   description: string;
   link: string;
   featured?: boolean;
+  priority?: boolean;
 }
 
-const BoxProject: React.FC<ProjectCardProps> = ({ backgroundImage, title, description, link, featured = false }) => {
-  const lines = description.split('\n');
-  return (
-    <div className={`relative w-full rounded-3xl overflow-hidden group ${featured ? 'min-h-[50vh]' : 'min-h-[42vh]'}`}
-      style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+const BoxProject: React.FC<ProjectCardProps> = ({
+  backgroundImage,
+  title,
+  description,
+  link,
+  featured = false,
+  priority = false,
+}) => {
+  const lines = description.split("\n");
 
-      {/* Content */}
-      <div className="absolute inset-0 flex flex-col justify-between p-8">
-        <div className="flex justify-between items-start">
+  return (
+    <Link
+      href={link}
+      aria-label={`${title} — view case study`}
+      className={`group relative block w-full overflow-hidden rounded-3xl ${
+        featured ? "min-h-[26rem] md:min-h-[30rem]" : "min-h-[22rem] md:min-h-[24rem]"
+      }`}
+    >
+      <Image
+        src={backgroundImage}
+        alt=""
+        fill
+        priority={priority}
+        sizes="(max-width: 768px) 100vw, (max-width: 1152px) 50vw, 1100px"
+        className="object-cover transition-transform duration-500 group-hover:scale-[1.03] motion-reduce:transform-none"
+      />
+
+      {/* Scrim for text legibility */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/10" />
+
+      <div className="absolute inset-0 flex flex-col justify-between p-6 sm:p-8">
+        <div>
           {featured && (
-            <span className="bg-white/15 backdrop-blur-sm text-white text-xs font-semibold px-4 py-1.5 rounded-full border border-white/20">
-              ✦ Featured Project
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/15 px-3.5 py-1.5 text-xs font-semibold text-white backdrop-blur-sm">
+              Featured project
             </span>
           )}
         </div>
 
-        <div className="flex flex-wrap justify-between items-end gap-4">
+        <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-white text-3xl md:text-4xl font-bold mb-1">{title}</p>
-            <p className="text-white/60 text-sm">{lines[0]}</p>
-            {lines[1] && <p className="text-white/40 text-xs mt-0.5">{lines[1]}</p>}
+            <h3 className="mb-1 text-2xl font-bold text-white sm:text-3xl md:text-4xl">
+              {title}
+            </h3>
+            <p className="text-sm text-white/80">{lines[0]}</p>
+            {lines[1] && (
+              <p className="mt-0.5 text-xs text-white/60">{lines[1]}</p>
+            )}
           </div>
-          <Link href={link}>
-            <span className="grad-bg text-white font-semibold text-sm px-6 py-3 rounded-full inline-block group-hover:opacity-90 transition-opacity">
-              View case study →
-            </span>
-          </Link>
+          <span
+            aria-hidden="true"
+            className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-ink transition-transform duration-300 group-hover:translate-x-1"
+          >
+            View case study <LuArrowRight className="h-4 w-4" />
+          </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
+
 export default BoxProject;

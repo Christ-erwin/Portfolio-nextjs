@@ -1,121 +1,190 @@
-import Image from "next/image";
 import React from "react";
+import type { IconType } from "react-icons";
+import { LuRefreshCw, LuBellRing, LuEye, LuWind, LuCheck } from "react-icons/lu";
+import {
+  Snapshot,
+  StepTitle,
+  Callout,
+  Figure,
+  ConstraintList,
+  Outcomes,
+} from "@/components/CaseStudy";
 
-function Img({ src, alt, w = 280 }: { src: string; alt: string; w?: number }) {
-  return <Image src={src} alt={alt} width={w} height={0} className="rounded-2xl w-full h-auto" />;
-}
-function StepTitle({ n, title }: { n: string; title: string }) {
-  return (
-    <div className="flex items-center gap-3 mb-4">
-      <span className="step-badge">{n}</span>
-      <h2 className="text-2xl md:text-3xl font-bold text-black">{title}</h2>
-    </div>
-  );
-}
+const problems: { icon: IconType; p: string }[] = [
+  {
+    icon: LuRefreshCw,
+    p: "Infinite scroll and algorithmic feeds trap users in passive consumption loops.",
+  },
+  {
+    icon: LuBellRing,
+    p: "Notification overload creates anxiety and compulsive checking.",
+  },
+  {
+    icon: LuEye,
+    p: "Public vanity metrics (likes, follower counts) distort self-expression and genuine connection.",
+  },
+  {
+    icon: LuWind,
+    p: "Feature bloat — Stories, Reels, Shops, Ads — buries the core social experience.",
+  },
+];
+
+const principles = [
+  {
+    t: "Intentional by design",
+    d: "No infinite scroll. The feed has a visible end. Users browse with purpose, not compulsion.",
+  },
+  {
+    t: "Content first",
+    d: "No like counts visible to others, no follower vanity metrics. Posts stand on their content alone.",
+  },
+  {
+    t: "Calm interface",
+    d: "Generous whitespace, a muted palette, grouped notifications. An app that respects your attention.",
+  },
+];
+
+const features = [
+  "Sign up / login with a short, clean onboarding",
+  "Create posts — text, photo, video — with minimal friction",
+  "A minimalist feed with no algorithmic manipulation",
+  "Thoughtful reactions beyond a single like",
+  "A follow system built around mutual connection",
+  "Profiles with bio and posts, no public vanity metrics",
+  "A calm notification center with grouped alerts, not red badges",
+];
+
+const screens = [
+  { src: "/images/Project_Images/Details/Gripple/grippleReal2.png", label: "Home Feed" },
+  { src: "/images/Project_Images/Details/Gripple/grippleReal3.png", label: "Post Detail" },
+  { src: "/images/Project_Images/Details/Gripple/grippleReal4.png", label: "Profile" },
+  { src: "/images/Project_Images/Details/Gripple/grippleReal7.png", label: "Create Post" },
+];
 
 export default function GrippleSection2() {
   return (
-    <article className="w-full bg-white px-6 py-16">
+    <article className="w-full bg-surface px-6 py-16">
       <div className="max-w-4xl mx-auto flex flex-col gap-20">
-
-        <div className="grid md:grid-cols-3 gap-4">
-          {[["Role","Solo UX/UI Designer"],["Type","Personal Concept Project"],["Tools","Figma · FigJam"]].map(([k,v])=>(
-            <div key={k} className="bg-gray-50 rounded-2xl p-5">
-              <p className="text-xs text-black/40 font-semibold uppercase tracking-wider mb-1">{k}</p>
-              <p className="text-black font-semibold">{v}</p>
-            </div>
-          ))}
-        </div>
+        <Snapshot
+          role="Solo — concept, UX, UI, prototype"
+          timeline="~3 weeks, self-initiated"
+          type="Concept project"
+          platform="Mobile (iOS & Android)"
+          status="Designed & prototyped · not shipped"
+          links={[
+            { kind: "prototype", href: "#" /* TODO: Figma prototype URL */ },
+          ]}
+        />
 
         <section>
-          <StepTitle n="01" title="Project Context" />
-          <p className="text-black/60 text-lg leading-relaxed">
-            Gripple started from a personal observation: existing social networks are engineered for addiction, not connection. Infinite scroll, algorithmic manipulation, and notification overload make them exhausting to use. I asked: what would a social app look like if it were designed for meaningful interaction instead of maximum engagement time?
+          <StepTitle n="01" title="Context" />
+          <p className="text-ink-muted text-lg leading-relaxed">
+            Gripple started from a personal observation: mainstream social
+            networks are engineered for time-on-app, not connection. Infinite
+            scroll, algorithmic feeds and notification overload make them
+            exhausting. The design question: what would a social app look like if
+            it optimised for meaningful interaction instead of engagement time?
           </p>
         </section>
 
         <section>
-          <StepTitle n="02" title="Problem Statement" />
+          <StepTitle n="02" title="Constraints & scope" />
+          <ConstraintList
+            items={[
+              "Self-initiated, solo, ~3 weeks — a focused MVP, not a full platform.",
+              "In scope: onboarding, feed, post creation, reactions, profile, notifications.",
+              "Out of scope: DMs, groups, discovery, moderation tooling, monetisation.",
+              "Design thesis fixed up front: no infinite scroll, no public vanity metrics.",
+              "No user research budget — direction is driven by well-documented attention-economy critique, to be validated later.",
+            ]}
+          />
+        </section>
+
+        <section>
+          <StepTitle n="03" title="Problem statement" />
           <div className="grid md:grid-cols-2 gap-4">
-            {[
-              { icon: "🔄", p: "Infinite scroll and algorithmic feeds trap users in passive consumption loops." },
-              { icon: "🔔", p: "Notification overload creates anxiety and compulsive checking behavior." },
-              { icon: "👁️", p: "Vanity metrics (likes, follower count) distort self-expression and genuine connection." },
-              { icon: "🌪️", p: "Feature bloat — Stories, Reels, Shops, Ads — clutters the core social experience." },
-            ].map((p,i) => (
-              <div key={i} className="flex gap-4 bg-gray-50 rounded-2xl p-5">
-                <span className="text-2xl flex-shrink-0">{p.icon}</span>
-                <p className="text-black/60 text-sm leading-relaxed">{p.p}</p>
+            {problems.map(({ icon: Icon, p }) => (
+              <div key={p} className="flex gap-4 bg-surface-alt rounded-2xl p-5">
+                <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-brand-tint text-brand flex-shrink-0">
+                  <Icon className="w-5 h-5" aria-hidden="true" />
+                </span>
+                <p className="text-ink-muted text-sm leading-relaxed">{p}</p>
               </div>
             ))}
           </div>
         </section>
 
         <section>
-          <StepTitle n="03" title="Design Principles" />
+          <StepTitle n="04" title="Design principles" />
           <div className="grid md:grid-cols-3 gap-4">
-            {[
-              { t: "Intentional by Design", d: "No infinite scroll. Feed has a visible end. Users browse with purpose, not compulsion." },
-              { t: "Content First", d: "No like counts visible to others. No follower vanity metrics. Your posts stand on their content alone." },
-              { t: "Calm Interface", d: "Generous whitespace, muted palette, no flashing notifications. An app that respects your attention." },
-            ].map(p => (
-              <div key={p.t} className="bg-gray-50 rounded-2xl p-5">
-                <p className="font-semibold text-black mb-2">{p.t}</p>
-                <p className="text-black/50 text-sm leading-relaxed">{p.d}</p>
+            {principles.map((p) => (
+              <div key={p.t} className="bg-surface-alt rounded-2xl p-5">
+                <p className="font-semibold text-ink mb-2">{p.t}</p>
+                <p className="text-ink-muted text-sm leading-relaxed">{p.d}</p>
               </div>
             ))}
           </div>
         </section>
 
         <section>
-          <StepTitle n="04" title="Key Features Designed" />
-          <div className="flex flex-col gap-3">
-            {[
-              "Sign up / Login with clean onboarding",
-              "Create posts — text, photo, video — with minimal friction",
-              "Minimalist feed with no algorithmic manipulation",
-              "Thoughtful reactions (beyond just likes)",
-              "Follow system with mutual connection focus",
-              "User profile — bio, posts, no public vanity metrics",
-              "Notification center with calm, grouped alerts (not red badges)",
-            ].map((f,i) => (
-              <div key={i} className="flex items-start gap-3 border border-gray-100 rounded-xl p-4">
-                <span className="w-5 h-5 rounded-full grad-bg flex items-center justify-center text-white text-xs flex-shrink-0 mt-0.5">✓</span>
-                <p className="text-black/70 text-sm">{f}</p>
-              </div>
+          <StepTitle n="05" title="What I designed" />
+          <ul className="flex flex-col gap-3">
+            {features.map((f) => (
+              <li
+                key={f}
+                className="flex items-start gap-3 border border-line rounded-xl p-4"
+              >
+                <span className="w-5 h-5 rounded-full grad-bg flex items-center justify-center text-white flex-shrink-0 mt-0.5">
+                  <LuCheck className="w-3 h-3" aria-hidden="true" />
+                </span>
+                <p className="text-ink-muted text-sm">{f}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section>
+          <StepTitle n="06" title="Screens" />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {screens.map((s) => (
+              <Figure key={s.label} src={s.src} alt={s.label} w={220} caption={s.label} />
             ))}
           </div>
         </section>
 
         <section>
-          <StepTitle n="05" title="Screens" />
-          <div className="grid grid-cols-3 gap-4">
-            {[
-              { src: "/images/Project_Images/Details/Gripple/grippleReal2.png", label: "Home Feed" },
-              { src: "/images/Project_Images/Details/Gripple/grippleReal3.png", label: "Post Detail" },
-              { src: "/images/Project_Images/Details/Gripple/grippleReal4.png", label: "Profile" },
-              { src: "/images/Project_Images/Details/Gripple/grippleReal7.png", label: "Create Post" },
-            ].map(s => (
-              <div key={s.label}>
-                <Img src={s.src} alt={s.label} w={220} />
-                <p className="text-center text-xs text-black/30 mt-2">{s.label}</p>
-              </div>
-            ))}
-          </div>
+          <StepTitle n="07" title="Outcomes" />
+          <Outcomes
+            criteria={[
+              "A session has a natural end — the feed stops instead of scrolling forever.",
+              "No like counts or follower numbers are visible to other users anywhere in the UI.",
+              "Notifications arrive grouped and calm — no red count badges.",
+              "Posting a text update takes 2 screens and under 20 seconds.",
+            ]}
+            tested={[
+              "Walked every screen against the two design-thesis rules to catch violations.",
+              "Prototype run-through of the post, react and follow flows.",
+              "Heuristic review focused on attention: what pulls the eye, what creates urgency, what can be removed.",
+            ]}
+            next="Diary study with 5–6 heavy social-media users trying Gripple for a week, measuring perceived calm and whether the missing metrics are actually missed."
+          />
         </section>
 
         <section>
-          <StepTitle n="06" title="Reflections" />
-          <p className="text-black/60 text-lg leading-relaxed">
-            Gripple taught me how powerful design constraints can be. By deliberately removing features (infinite scroll, public like counts), the interface became cleaner, calmer, and more honest. This project deepened my understanding of ethical design — and how the choices we make as designers shape user behavior at scale.
+          <StepTitle n="08" title="Reflections & what I'd do next" />
+          <p className="text-ink-muted text-lg leading-relaxed">
+            Gripple taught me how much a clear thesis and a few hard constraints
+            can do for a design — removing features (infinite scroll, public
+            likes) made the interface calmer and more honest. Next I&apos;d run
+            the diary study, design the moderation and reporting flows I scoped
+            out, and test whether a bounded feed keeps people coming back.
           </p>
-          <div className="mt-6 bg-purple-50 border-l-4 border-purple-400 p-5 rounded-r-2xl">
-            <p className="text-purple-800 text-sm italic font-medium">
-              &ldquo;The most powerful design decision I made on Gripple was what to remove. Every deletion was a deliberate act of respect for the user&apos;s attention.&rdquo;
-            </p>
-          </div>
+          <Callout>
+            &ldquo;The most powerful decision on Gripple was what to leave out —
+            every deletion was a deliberate act of respect for the user&apos;s
+            attention.&rdquo;
+          </Callout>
         </section>
-
       </div>
     </article>
   );

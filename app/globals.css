@@ -1,29 +1,74 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #111111;
-  --gradient: linear-gradient(90deg, #FD23E3, #8021E8, #0619EA);
-  --font-primary: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+/* ------------------------------------------------------------------ */
+/*  Design tokens (Tailwind v4 @theme -> utilities like bg-surface)    */
+/* ------------------------------------------------------------------ */
+@theme {
+  --font-sans: var(--font-outfit), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  /* Surfaces */
+  --color-surface: #ffffff;
+  --color-surface-alt: #f7f7f4;
+  --color-surface-sunken: #f1f4f8;
+
+  /* Text — all AA-compliant on white */
+  --color-ink: #0f0f12;         /* headings / primary                */
+  --color-ink-muted: #52525b;   /* ~7:1  — body copy                 */
+  --color-ink-subtle: #6b6b74;  /* ~5:1  — captions, meta (minimum)  */
+  --color-line: #e6e7eb;
+
+  /* Brand */
+  --color-brand: #7b1fd6;       /* ~6.4:1 on white                   */
+  --color-brand-strong: #5f14ab;
+  --color-brand-ink: #ffffff;
+  --color-brand-tint: #f4ecfd;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --background: #ffffff;
+  --foreground: #0f0f12;
+  --gradient: linear-gradient(90deg, #fd23e3, #8021e8, #0619ea);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-primary);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+}
 
-/* Shared utility classes */
+/* ------------------------------------------------------------------ */
+/*  Accessibility baseline                                            */
+/* ------------------------------------------------------------------ */
+:where(a, button, [role="button"], input, textarea, select, summary):focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Shared utilities                                                  */
+/* ------------------------------------------------------------------ */
 .grad-text {
   background: var(--gradient);
   -webkit-background-clip: text;
@@ -35,27 +80,28 @@ html { scroll-behavior: smooth; }
   background: var(--gradient);
 }
 
+/* eyebrow label above section headings */
 .section-tag {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 11px;
+  gap: 8px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #8021E8;
+  color: var(--color-brand-strong);
   margin-bottom: 12px;
 }
 
 .section-tag::before {
-  content: '';
+  content: "";
   display: inline-block;
   width: 20px;
   height: 2px;
   background: var(--gradient);
 }
 
-/* Case study step numbers */
+/* case-study step number */
 .step-badge {
   display: inline-flex;
   align-items: center;
@@ -64,28 +110,8 @@ html { scroll-behavior: smooth; }
   height: 32px;
   border-radius: 50%;
   background: var(--gradient);
-  color: white;
+  color: #fff;
   font-size: 12px;
   font-weight: 700;
   flex-shrink: 0;
-}
-
-/* Img placeholder */
-.img-placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: #f8f8f8;
-  border: 2px dashed #e0e0e0;
-  border-radius: 16px;
-  color: #aaa;
-  font-size: 12px;
-  text-align: center;
-  gap: 8px;
-}
-
-.img-placeholder::before {
-  content: '🖼';
-  font-size: 28px;
 }

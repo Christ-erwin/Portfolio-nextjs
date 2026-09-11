@@ -1,45 +1,239 @@
 "use client";
-import React, { useRef } from 'react';
-import emailjs from '@emailjs/browser';
-import { toast } from 'react-toastify';
+import React, { useRef, useState } from "react";
+import emailjs from "@emailjs/browser";
+import { toast } from "react-toastify";
+import { LuMail, LuLinkedin, LuPhone, LuArrowRight } from "react-icons/lu";
+
+type Errors = Partial<Record<"user_name" | "user_email" | "subject" | "message", string>>;
+
+const SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+const TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
+const PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
+
+const fieldBase =
+  "w-full bg-surface-alt border border-line rounded-xl px-4 py-3.5 text-ink placeholder-ink-subtle/70 text-sm transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent aria-[invalid=true]:border-red-500 aria-[invalid=true]:ring-red-500/40";
+
+function validate(data: FormData): Errors {
+  const errors: Errors = {};
+  const name = String(data.get("user_name") ?? "").trim();
+  const email = String(data.get("user_email") ?? "").trim();
+  const subject = String(data.get("subject") ?? "").trim();
+  const message = String(data.get("message") ?? "").trim();
+
+  if (!name) errors.user_name = "Please enter your name.";
+  if (!email) errors.user_email = "Please enter your email address.";
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+    errors.user_email = "Please enter a valid email address.";
+  if (!subject) errors.subject = "Please add a subject.";
+  if (!message) errors.message = "Please tell me a bit about your project.";
+  else if (message.length < 10)
+    errors.message = "That message looks a little short — add a few more details.";
+
+  return errors;
+}
 
 export default function ContactSection2() {
   const form = useRef<HTMLFormElement>(null);
+  const summaryRef = useRef<HTMLDivElement>(null);
+  const [errors, setErrors] = useState<Errors>({});
+  const [submitting, setSubmitting] = useState(false);
 
-  const sendEmail = (e: React.FormEvent) => {
+  const clearError = (name: keyof Errors) =>
+    setErrors((prev) => {
+      if (!prev[name]) return prev;
+      const next = { ...prev };
+      delete next[name];
+      return next;
+    });
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    emailjs.sendForm(
-      process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-      process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
-      form.current!,
-      process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
-    ).then(
-      () => { toast.success('Message sent successfully!'); form.current?.reset(); },
-      () => { toast.error('Something went wrong. Please try again.'); }
-    );
+    if (!form.current) return;
+
+    const found = validate(new FormData(form.current));
+    setErrors(found);
+    if (Object.keys(found).length > 0) {
+      requestAnimationFrame(() => summaryRef.current?.focus());
+      return;
+    }
+
+    if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
+      toast.error(
+        "The contact form isn't configured yet. Please email me directly."
+      );
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, form.current, PUBLIC_KEY);
+      toast.success("Message sent — I'll get back to you within 24 hours.");
+      form.current.reset();
+    } catch {
+      toast.error("Something went wrong. Please try again or email me directly.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  return (
-    <section className="w-full bg-white px-6 py-16">
-      <div className="max-w-4xl mx-auto grid md:grid-cols-5 gap-12 items-start">
+  const errorEntries = Object.entries(errors) as [keyof Errors, string][];
 
+  return (
+    <section className="w-full bg-surface px-6 py-16">
+      <div className="max-w-4xl mx-auto grid md:grid-cols-5 gap-12 items-start">
         {/* Left — form */}
         <div className="md:col-span-3">
-          <h2 className="text-2xl font-bold text-black mb-6">Send a message</h2>
-          <form ref={form} onSubmit={sendEmail} className="flex flex-col gap-4">
-            <div className="grid sm:grid-cols-2 gap-4">
-              <input type="text" name="user_name" placeholder="Your name" required
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-black placeholder-black/30 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition" />
-              <input type="email" name="user_email" placeholder="Your email" required
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-black placeholder-black/30 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition" />
+          <h2 className="text-2xl font-bold text-ink mb-6">Send a message</h2>
+
+          {errorEntries.length > 0 && (
+            <div
+              ref={summaryRef}
+              tabIndex={-1}
+              role="alert"
+              aria-labelledby="form-error-title"
+              className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4"
+            >
+              <p id="form-error-title" className="text-sm font-semibold text-red-800">
+                There is a problem with your submission
+              </p>
+              <ul className="mt-2 list-disc pl-5 text-sm text-red-700">
+                {errorEntries.map(([key, msg]) => (
+                  <li key={key}>
+                    <a href={`#${key}`} className="underline">
+                      {msg}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <input type="text" name="subject" placeholder="Subject (e.g. Remote contract, Freelance project)" required
-              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-black placeholder-black/30 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition" />
-            <textarea rows={6} name="message" placeholder="Tell me about your project, timeline, and budget..." required
-              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 text-black placeholder-black/30 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition resize-none"></textarea>
-            <button type="submit"
-              className="w-full grad-bg text-white font-semibold py-4 rounded-xl text-sm hover:opacity-90 transition-opacity">
-              Send message →
+          )}
+
+          <form
+            ref={form}
+            onSubmit={handleSubmit}
+            noValidate
+            className="flex flex-col gap-5"
+          >
+            <div className="grid sm:grid-cols-2 gap-5">
+              <div>
+                <label
+                  htmlFor="user_name"
+                  className="block text-sm font-medium text-ink mb-1.5"
+                >
+                  Name
+                </label>
+                <input
+                  id="user_name"
+                  name="user_name"
+                  type="text"
+                  autoComplete="name"
+                  placeholder="Your name"
+                  aria-invalid={!!errors.user_name}
+                  aria-describedby={errors.user_name ? "user_name-error" : undefined}
+                  onInput={() => clearError("user_name")}
+                  className={fieldBase}
+                />
+                {errors.user_name && (
+                  <p id="user_name-error" className="mt-1.5 text-xs text-red-600">
+                    {errors.user_name}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label
+                  htmlFor="user_email"
+                  className="block text-sm font-medium text-ink mb-1.5"
+                >
+                  Email
+                </label>
+                <input
+                  id="user_email"
+                  name="user_email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder="you@example.com"
+                  aria-invalid={!!errors.user_email}
+                  aria-describedby={
+                    errors.user_email ? "user_email-error" : undefined
+                  }
+                  onInput={() => clearError("user_email")}
+                  className={fieldBase}
+                />
+                {errors.user_email && (
+                  <p id="user_email-error" className="mt-1.5 text-xs text-red-600">
+                    {errors.user_email}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="subject"
+                className="block text-sm font-medium text-ink mb-1.5"
+              >
+                Subject
+              </label>
+              <input
+                id="subject"
+                name="subject"
+                type="text"
+                placeholder="e.g. Remote contract, freelance project"
+                aria-invalid={!!errors.subject}
+                aria-describedby={errors.subject ? "subject-error" : undefined}
+                onInput={() => clearError("subject")}
+                className={fieldBase}
+              />
+              {errors.subject && (
+                <p id="subject-error" className="mt-1.5 text-xs text-red-600">
+                  {errors.subject}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="message"
+                className="block text-sm font-medium text-ink mb-1.5"
+              >
+                Message
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows={6}
+                placeholder="Tell me about your project, timeline, and budget…"
+                aria-invalid={!!errors.message}
+                aria-describedby={errors.message ? "message-error" : undefined}
+                onInput={() => clearError("message")}
+                className={`${fieldBase} resize-y`}
+              />
+              {errors.message && (
+                <p id="message-error" className="mt-1.5 text-xs text-red-600">
+                  {errors.message}
+                </p>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              disabled={submitting}
+              className="w-full inline-flex items-center justify-center gap-2 grad-bg text-white font-semibold py-4 rounded-xl text-sm transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {submitting ? (
+                <>
+                  <span
+                    aria-hidden="true"
+                    className="h-4 w-4 rounded-full border-2 border-white/40 border-t-white animate-spin motion-reduce:animate-none"
+                  />
+                  Sending…
+                </>
+              ) : (
+                <>
+                  Send message <LuArrowRight className="h-4 w-4" aria-hidden="true" />
+                </>
+              )}
             </button>
           </form>
         </div>
@@ -49,42 +243,85 @@ export default function ContactSection2() {
           <div>
             <p className="section-tag">Direct contact</p>
             <div className="flex flex-col gap-3">
-              <a href="mailto:framchristerwintl@gmail.com"
-                className="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-3.5 hover:bg-gray-100 transition-colors group">
-                <span className="text-xl">✉️</span>
-                <div>
-                  <p className="text-xs text-black/40">Email</p>
-                  <p className="text-sm font-medium text-black">framchristerwintl@gmail.com</p>
-                </div>
+              <a
+                href="mailto:framchristerwintl@gmail.com"
+                className="flex items-center gap-3 bg-surface-alt rounded-xl px-4 py-3.5 hover:bg-surface-sunken transition-colors"
+              >
+                <span className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-brand-tint text-brand flex-shrink-0">
+                  <LuMail className="w-4 h-4" aria-hidden="true" />
+                </span>
+                <span>
+                  <span className="block text-xs text-ink-subtle">Email</span>
+                  <span className="block text-sm font-medium text-ink">
+                    framchristerwintl@gmail.com
+                  </span>
+                </span>
               </a>
-              <a href="https://www.linkedin.com/in/christ-erwin-fram-696a69257/" target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-3 bg-gray-50 rounded-xl px-4 py-3.5 hover:bg-gray-100 transition-colors">
-                <span className="text-xl">💼</span>
-                <div>
-                  <p className="text-xs text-black/40">LinkedIn</p>
-                  <p className="text-sm font-medium text-black">Christ Erwin Fram</p>
-                </div>
+              <a
+                href="https://www.linkedin.com/in/christ-erwin-fram-696a69257/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 bg-surface-alt rounded-xl px-4 py-3.5 hover:bg-surface-sunken transition-colors"
+              >
+                <span className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-brand-tint text-brand flex-shrink-0">
+                  <LuLinkedin className="w-4 h-4" aria-hidden="true" />
+                </span>
+                <span>
+                  <span className="block text-xs text-ink-subtle">LinkedIn</span>
+                  <span className="block text-sm font-medium text-ink">
+                    Christ Erwin Fram
+                  </span>
+                </span>
+                <span className="sr-only">(opens in a new tab)</span>
+              </a>
+              <a
+                href="tel:+2250153220544"
+                className="flex items-center gap-3 bg-surface-alt rounded-xl px-4 py-3.5 hover:bg-surface-sunken transition-colors"
+              >
+                <span className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-brand-tint text-brand flex-shrink-0">
+                  <LuPhone className="w-4 h-4" aria-hidden="true" />
+                </span>
+                <span>
+                  <span className="block text-xs text-ink-subtle">Phone</span>
+                  <span className="block text-sm font-medium text-ink">
+                    +225 01 53 22 05 44
+                  </span>
+                </span>
               </a>
             </div>
           </div>
 
           <div className="bg-black rounded-2xl p-6">
-            <p className="text-white font-semibold mb-1">Response time</p>
-            <p className="text-white/50 text-sm">I reply within 24 hours on business days.</p>
+            <p className="text-white font-semibold mb-1">How I work</p>
+            <ul className="text-white/70 text-sm flex flex-col gap-1.5">
+              <li>Reply within 24 hours on business days</li>
+              <li>Based in GMT (UTC+0) — async-first, overlap with EU &amp; US</li>
+              <li>Figma-native · Notion, Slack, Linear, Jira</li>
+            </ul>
             <div className="mt-4 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-              <span className="text-green-400 text-xs font-medium">Available for new projects</span>
+              <span className="w-2 h-2 rounded-full bg-green-400 motion-safe:animate-pulse" />
+              <span className="text-green-300 text-xs font-medium">
+                Available for new projects
+              </span>
             </div>
           </div>
 
-          <div className="bg-gray-50 rounded-2xl p-5">
-            <p className="font-semibold text-black mb-3 text-sm">I&apos;m open to</p>
-            {["Remote contracts (part or full time)","Freelance missions (short or long term)","Full-time remote roles","Collaborations with agencies"].map(t => (
-              <p key={t} className="text-black/60 text-xs mb-1.5">→ {t}</p>
-            ))}
+          <div className="bg-surface-alt rounded-2xl p-5">
+            <p className="font-semibold text-ink mb-3 text-sm">I&apos;m open to</p>
+            <ul className="flex flex-col gap-1.5">
+              {[
+                "Remote contracts (part or full time)",
+                "Freelance missions (short or long term)",
+                "Full-time remote roles",
+                "Collaborations with agencies",
+              ].map((t) => (
+                <li key={t} className="text-ink-muted text-xs">
+                  → {t}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
-
       </div>
     </section>
   );

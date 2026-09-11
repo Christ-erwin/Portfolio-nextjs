@@ -1,18 +1,20 @@
+import type { Metadata } from "next";
 import AboutSection1 from "@/components/AllSections/AboutComp/AboutSection1";
 import AboutSection2 from "@/components/AllSections/AboutComp/AboutSection2";
-import Menu from "@/components/Menu";
 import PreFooter from "@/components/PreFooter";
-import React from "react";
 
-export default function page() {
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "Product Designer and Frontend Developer with 4+ years designing mobile and web products across fintech, smart home, real estate, and entertainment.",
+};
+
+export default function AboutPage() {
   return (
-    <>
-      <div className="bg-[#F2F8FC] overflow-hidden flex flex-col">
-        <Menu />
-        <AboutSection1 />
-        <AboutSection2 />
-        <PreFooter/>
-      </div>
-    </>
+    <div className="flex flex-col">
+      <AboutSection1 />
+      <AboutSection2 />
+      <PreFooter />
+    </div>
   );
 }

@@ -1,8 +1,9 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useState, useEffect } from "react";
-import { FaArrowLeft } from "react-icons/fa6";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { LuArrowLeft } from "react-icons/lu";
 
 const links = [
   { href: "/", label: "Home" },
@@ -25,93 +26,161 @@ export default function Menu() {
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   const showBackButton = showBackButtonOn.includes(pathname);
 
+  const isActive = useCallback(
+    (href: string) =>
+      href === "/" ? pathname === "/" : pathname.startsWith(href),
+    [pathname]
+  );
+
+  // Sticky background on scroll (passive + rAF throttled)
   useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", fn);
-    return () => window.removeEventListener("scroll", fn);
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 20);
+        ticking = false;
+      });
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  // Close on Escape + lock body scroll while open
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-white/90 backdrop-blur-md shadow-sm" : "bg-transparent"
+      aria-label="Primary"
+      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
+        scrolled || open
+          ? "bg-white/90 backdrop-blur-md shadow-sm"
+          : "bg-transparent"
       }`}
     >
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link href="/">
-          <img
+        <Link href="/" aria-label="Christ Erwin Fram — home" className="flex items-center">
+          <Image
             src="/images/Logo_Img/logo.svg"
-            alt="Logo"
-            className="h-16 w-auto"
+            alt="Christ Erwin Fram"
+            width={132}
+            height={40}
+            priority
+            className="h-10 w-auto"
           />
         </Link>
 
         {/* Desktop */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-2">
           {links.map((l) => (
             <Link
               key={l.href}
               href={l.href}
-              className={`text-sm transition-colors duration-200 ${
-                pathname === l.href
-                  ? "font-semibold text-black"
-                  : "text-black/50 hover:text-black"
+              aria-current={isActive(l.href) ? "page" : undefined}
+              className={`px-3 py-2 text-sm rounded-lg transition-colors duration-200 ${
+                isActive(l.href)
+                  ? "font-semibold text-ink"
+                  : "text-ink-subtle hover:text-ink"
               }`}
             >
               {l.label}
             </Link>
           ))}
-          <Link href="/contact">
-            <span className="text-sm font-semibold text-white grad-bg px-5 py-2 rounded-full">
-              Hire me
-            </span>
+          <Link
+            href="/contact"
+            className="ml-2 text-sm font-semibold text-white grad-bg px-5 py-2.5 rounded-full"
+          >
+            Hire me
           </Link>
         </div>
 
         {/* Mobile hamburger */}
         <button
-          className="md:hidden flex flex-col gap-1.5 p-2"
-          onClick={() => setOpen(!open)}
-          aria-label="Menu"
+          type="button"
+          className="md:hidden flex items-center justify-center w-11 h-11 -mr-2"
+          onClick={() => setOpen((v) => !v)}
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          aria-controls="mobile-menu"
         >
-          <span className={`block w-5 h-0.5 bg-black transition-all duration-300 ${open ? "rotate-45 translate-y-2" : ""}`}></span>
-          <span className={`block w-5 h-0.5 bg-black transition-all duration-300 ${open ? "opacity-0" : ""}`}></span>
-          <span className={`block w-5 h-0.5 bg-black transition-all duration-300 ${open ? "-rotate-45 -translate-y-2" : ""}`}></span>
+          <span className="relative block w-5 h-4" aria-hidden="true">
+            <span
+              className={`absolute left-0 top-0 block w-5 h-0.5 bg-ink transition-transform duration-300 ${
+                open ? "translate-y-[7px] rotate-45" : ""
+              }`}
+            />
+            <span
+              className={`absolute left-0 top-[7px] block w-5 h-0.5 bg-ink transition-opacity duration-300 ${
+                open ? "opacity-0" : ""
+              }`}
+            />
+            <span
+              className={`absolute left-0 bottom-0 block w-5 h-0.5 bg-ink transition-transform duration-300 ${
+                open ? "-translate-y-[7px] -rotate-45" : ""
+              }`}
+            />
+          </span>
         </button>
       </div>
 
-      {/* Back button */}
+      {/* Back button (case-study pages) */}
       {showBackButton && (
-        <div
-          onClick={() => router.back()}
-          className="w-14 h-14 ml-[6%] mt-[1%] bg-[#FD23E3] rounded-full
-          flex justify-center items-center cursor-pointer hover:bg-[#1E1BEA]
-          transition-colors duration-300"
-        >
-          <FaArrowLeft color="white" className="w-6 h-auto" />
+        <div className="max-w-6xl mx-auto px-6">
+          <button
+            type="button"
+            onClick={() => router.back()}
+            aria-label="Go back to the previous page"
+            className="mt-2 w-12 h-12 grad-bg rounded-full flex justify-center items-center text-white shadow-md hover:opacity-90 transition-opacity"
+          >
+            <LuArrowLeft className="w-5 h-5" aria-hidden="true" />
+          </button>
         </div>
       )}
 
       {/* Mobile menu */}
       {open && (
-        <div className="md:hidden bg-white border-t border-gray-100 px-6 py-4 flex flex-col gap-4">
+        <div
+          id="mobile-menu"
+          ref={panelRef}
+          className="md:hidden bg-white border-t border-line px-6 py-4 flex flex-col gap-1"
+        >
           {links.map((l) => (
             <Link
               key={l.href}
               href={l.href}
-              onClick={() => setOpen(false)}
-              className={`text-sm ${pathname === l.href ? "font-semibold text-black" : "text-black/60"}`}
+              aria-current={isActive(l.href) ? "page" : undefined}
+              className={`py-3 text-base ${
+                isActive(l.href) ? "font-semibold text-ink" : "text-ink-subtle"
+              }`}
             >
               {l.label}
             </Link>
           ))}
-          <Link href="/contact" onClick={() => setOpen(false)}>
-            <span className="text-sm font-semibold text-white grad-bg px-5 py-2 rounded-full inline-block">
-              Hire me
-            </span>
+          <Link
+            href="/contact"
+            className="mt-2 text-sm font-semibold text-white grad-bg px-5 py-3 rounded-full inline-block text-center"
+          >
+            Hire me
           </Link>
         </div>
       )}

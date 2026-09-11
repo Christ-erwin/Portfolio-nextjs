@@ -1,18 +1,20 @@
+import type { Metadata } from "next";
 import SkillsSection1 from "@/components/AllSections/SkillsComp/SkillsSection1";
 import SkillsSection2 from "@/components/AllSections/SkillsComp/SkillsSection2";
-import Menu from "@/components/Menu";
 import PreFooter from "@/components/PreFooter";
-import React from "react";
 
-export default function page() {
+export const metadata: Metadata = {
+  title: "Skills & Tools",
+  description:
+    "Design thinking backed by technical fluency — Figma, UX research, design systems, React Native, Next.js and Tailwind.",
+};
+
+export default function SkillsPage() {
   return (
-    <>
-      <div className="bg-[#F2F8FC] overflow-hidden flex flex-col">
-        <Menu />
-        <SkillsSection1 />
-        <SkillsSection2 />
-        <PreFooter />
-      </div>
-    </>
+    <div className="flex flex-col">
+      <SkillsSection1 />
+      <SkillsSection2 />
+      <PreFooter />
+    </div>
   );
 }

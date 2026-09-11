@@ -1,16 +1,20 @@
+import type { Metadata } from "next";
 import FoodygoSection1 from "@/components/AllSousSections/Foodygo/FoodygoSection1";
 import FoodygoSection2 from "@/components/AllSousSections/Foodygo/FoodygoSection2";
-import Menu from "@/components/Menu";
-import React from "react";
+import PreFooter from "@/components/PreFooter";
 
-export default function page() {
+export const metadata: Metadata = {
+  title: "FoodyGo — Restaurant Ordering App",
+  description:
+    "A smart restaurant ordering app — from menu browsing to real-time delivery tracking.",
+};
+
+export default function FoodygoPage() {
   return (
-    <>
-      <div className="bg-[#F2F8FC] overflow-hidden flex flex-col ">
-        <Menu />
-        <FoodygoSection1 />
-        <FoodygoSection2 />
-      </div>
-    </>
+    <div className="flex flex-col">
+      <FoodygoSection1 />
+      <FoodygoSection2 />
+      <PreFooter />
+    </div>
   );
 }

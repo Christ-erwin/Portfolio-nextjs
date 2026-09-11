@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Menu from "@/components/Menu";
 import Footer from "@/components/Footer";
 import { ToastContainer } from "react-toastify";
@@ -9,28 +9,36 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function AppWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const reduceMotion = useReducedMotion();
 
   return (
     <>
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-ink focus:shadow-lg"
+      >
+        Skip to content
+      </a>
       <Menu />
-      <AnimatePresence mode="wait">
-        <motion.div
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.main
+          id="main"
           key={pathname}
-          initial={{ opacity: 0 }}
+          initial={reduceMotion ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5, ease: "easeInOut" }}
+          exit={reduceMotion ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.25, ease: "easeInOut" }}
           className="min-h-screen flex flex-col"
         >
           {children}
-        </motion.div>
+        </motion.main>
       </AnimatePresence>
       <Footer />
       <ToastContainer
         position="top-right"
         autoClose={4000}
         hideProgressBar={false}
-        newestOnTop={false}
+        newestOnTop
         closeOnClick
         pauseOnHover
         draggable
