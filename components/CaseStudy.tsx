@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import { LuExternalLink, LuGithub, LuFigma } from "react-icons/lu";
+import { pick, type Locale } from "@/lib/locale";
 
 /* ------------------------------------------------------------------ */
 /*  Snapshot — the scannable header every case study opens with        */
@@ -11,13 +12,8 @@ export type ProjectLink = {
   label?: string;
 };
 
-const linkMeta = {
-  prototype: { icon: LuFigma, text: "Interactive prototype" },
-  repo: { icon: LuGithub, text: "Source code" },
-  live: { icon: LuExternalLink, text: "Live product" },
-} as const;
-
 export function Snapshot({
+  locale,
   role,
   timeline,
   type,
@@ -25,6 +21,7 @@ export function Snapshot({
   status,
   links = [],
 }: {
+  locale: Locale;
   role: string;
   timeline: string;
   type: string;
@@ -32,12 +29,24 @@ export function Snapshot({
   status: string;
   links?: ProjectLink[];
 }) {
+  const linkMeta = {
+    prototype: {
+      icon: LuFigma,
+      text: pick(locale, "Interactive prototype", "Prototype interactif"),
+    },
+    repo: { icon: LuGithub, text: pick(locale, "Source code", "Code source") },
+    live: {
+      icon: LuExternalLink,
+      text: pick(locale, "Live product", "Produit en ligne"),
+    },
+  } as const;
+
   const rows: [string, string][] = [
-    ["Role", role],
-    ["Timeline", timeline],
-    ["Type", type],
-    ["Platform", platform],
-    ["Status", status],
+    [pick(locale, "Role", "Rôle"), role],
+    [pick(locale, "Timeline", "Durée"), timeline],
+    [pick(locale, "Type", "Type"), type],
+    [pick(locale, "Platform", "Plateforme"), platform],
+    [pick(locale, "Status", "Statut"), status],
   ];
   const ready = (l: ProjectLink) => Boolean(l.href) && !l.href.startsWith("#");
 
@@ -65,7 +74,7 @@ export function Snapshot({
                   className="inline-flex items-center gap-2 rounded-full border border-dashed border-line px-4 py-2 text-sm font-medium text-ink-subtle"
                 >
                   <Icon className="w-4 h-4" aria-hidden="true" />
-                  {(l.label ?? m.text)} — on request
+                  {l.label ?? m.text} — {pick(locale, "on request", "sur demande")}
                 </span>
               );
             }
@@ -79,7 +88,9 @@ export function Snapshot({
               >
                 <Icon className="w-4 h-4 text-brand" aria-hidden="true" />
                 {l.label ?? m.text}
-                <span className="sr-only">(opens in a new tab)</span>
+                <span className="sr-only">
+                  ({pick(locale, "opens in a new tab", "ouvre un nouvel onglet")})
+                </span>
               </a>
             );
           })}
@@ -93,10 +104,12 @@ export function Snapshot({
 /*  Outcomes — measurable targets + how the design was pressure-tested */
 /* ------------------------------------------------------------------ */
 export function Outcomes({
+  locale,
   criteria,
   tested,
   next,
 }: {
+  locale: Locale;
   criteria: string[];
   tested: string[];
   next?: string;
@@ -105,7 +118,11 @@ export function Outcomes({
     <div className="grid md:grid-cols-2 gap-4">
       <div className="rounded-2xl border border-line p-6">
         <p className="font-semibold text-ink mb-3">
-          Success criteria I designed against
+          {pick(
+            locale,
+            "Success criteria I designed against",
+            "Critères de succès visés"
+          )}
         </p>
         <ul className="flex flex-col gap-2">
           {criteria.map((c) => (
@@ -120,7 +137,11 @@ export function Outcomes({
       </div>
       <div className="rounded-2xl border border-line p-6">
         <p className="font-semibold text-ink mb-3">
-          How I pressure-tested the design
+          {pick(
+            locale,
+            "How I pressure-tested the design",
+            "Comment j'ai mis le design à l'épreuve"
+          )}
         </p>
         <ul className="flex flex-col gap-2">
           {tested.map((t) => (
@@ -134,7 +155,9 @@ export function Outcomes({
         </ul>
         {next && (
           <p className="mt-4 text-sm text-ink-subtle border-t border-line pt-4">
-            <span className="font-semibold text-ink">Next step — </span>
+            <span className="font-semibold text-ink">
+              {pick(locale, "Next step — ", "Prochaine étape — ")}
+            </span>
             {next}
           </p>
         )}

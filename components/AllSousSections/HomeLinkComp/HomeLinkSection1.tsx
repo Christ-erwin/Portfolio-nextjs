@@ -1,15 +1,14 @@
 import React from "react";
 import Image from "next/image";
+import { pick, type Locale } from "@/lib/locale";
 
-const tags = [
-  "UX Research",
-  "UI Design",
-  "Prototyping",
-  "iOS & Android",
-  "Design System",
-];
+export default function HomeLinkSection1({ locale }: { locale: Locale }) {
+  const tags = pick(
+    locale,
+    ["UX Research", "UI Design", "Prototyping", "iOS & Android", "Design System"],
+    ["Recherche UX", "Design UI", "Prototypage", "iOS & Android", "Design System"]
+  );
 
-export default function HomeLinkSection1() {
   return (
     <section className="relative w-full min-h-[30rem] md:min-h-[38rem] flex items-end px-6 pb-14 pt-32 overflow-hidden">
       <Image
@@ -24,7 +23,7 @@ export default function HomeLinkSection1() {
 
       <div className="relative max-w-6xl w-full mx-auto">
         <span className="inline-block rounded-full border border-white/25 bg-white/15 px-4 py-1.5 text-xs font-semibold text-white backdrop-blur-sm">
-          Client Project · Pommy
+          {pick(locale, "Client Project · Pommy", "Projet client · Pommy")}
         </span>
 
         <h1 className="mt-4 text-4xl md:text-6xl font-bold text-white leading-[1.1]">
@@ -32,8 +31,11 @@ export default function HomeLinkSection1() {
         </h1>
 
         <p className="mt-4 max-w-xl text-lg md:text-xl font-medium text-white/85 leading-relaxed">
-          Smart Home App — buy, install &amp; control your connected devices from
-          one place.
+          {pick(
+            locale,
+            "Smart Home App — buy, install & control your connected devices from one place.",
+            "App maison connectée — acheter, installer et contrôler vos appareils connectés depuis un seul endroit."
+          )}
         </p>
 
         <ul className="mt-6 flex flex-wrap gap-2.5">

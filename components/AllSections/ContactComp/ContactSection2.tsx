@@ -3,6 +3,7 @@ import React, { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 import { toast } from "react-toastify";
 import { LuMail, LuLinkedin, LuPhone, LuArrowRight } from "react-icons/lu";
+import { pick, type Locale } from "@/lib/locale";
 
 type Errors = Partial<Record<"user_name" | "user_email" | "subject" | "message", string>>;
 
@@ -13,26 +14,46 @@ const PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
 const fieldBase =
   "w-full bg-surface-alt border border-line rounded-xl px-4 py-3.5 text-ink placeholder-ink-subtle/70 text-sm transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent aria-[invalid=true]:border-red-500 aria-[invalid=true]:ring-red-500/40";
 
-function validate(data: FormData): Errors {
+function validate(data: FormData, locale: Locale): Errors {
   const errors: Errors = {};
   const name = String(data.get("user_name") ?? "").trim();
   const email = String(data.get("user_email") ?? "").trim();
   const subject = String(data.get("subject") ?? "").trim();
   const message = String(data.get("message") ?? "").trim();
 
-  if (!name) errors.user_name = "Please enter your name.";
-  if (!email) errors.user_email = "Please enter your email address.";
+  if (!name)
+    errors.user_name = pick(locale, "Please enter your name.", "Merci d'indiquer votre nom.");
+  if (!email)
+    errors.user_email = pick(
+      locale,
+      "Please enter your email address.",
+      "Merci d'indiquer votre adresse e-mail."
+    );
   else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-    errors.user_email = "Please enter a valid email address.";
-  if (!subject) errors.subject = "Please add a subject.";
-  if (!message) errors.message = "Please tell me a bit about your project.";
+    errors.user_email = pick(
+      locale,
+      "Please enter a valid email address.",
+      "Merci d'indiquer une adresse e-mail valide."
+    );
+  if (!subject)
+    errors.subject = pick(locale, "Please add a subject.", "Merci d'ajouter un objet.");
+  if (!message)
+    errors.message = pick(
+      locale,
+      "Please tell me a bit about your project.",
+      "Merci de me parler un peu de votre projet."
+    );
   else if (message.length < 10)
-    errors.message = "That message looks a little short — add a few more details.";
+    errors.message = pick(
+      locale,
+      "That message looks a little short — add a few more details.",
+      "Ce message semble un peu court — ajoutez quelques détails."
+    );
 
   return errors;
 }
 
-export default function ContactSection2() {
+export default function ContactSection2({ locale }: { locale: Locale }) {
   const form = useRef<HTMLFormElement>(null);
   const summaryRef = useRef<HTMLDivElement>(null);
   const [errors, setErrors] = useState<Errors>({});
@@ -50,7 +71,7 @@ export default function ContactSection2() {
     e.preventDefault();
     if (!form.current) return;
 
-    const found = validate(new FormData(form.current));
+    const found = validate(new FormData(form.current), locale);
     setErrors(found);
     if (Object.keys(found).length > 0) {
       requestAnimationFrame(() => summaryRef.current?.focus());
@@ -59,7 +80,11 @@ export default function ContactSection2() {
 
     if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
       toast.error(
-        "The contact form isn't configured yet. Please email me directly."
+        pick(
+          locale,
+          "The contact form isn't configured yet. Please email me directly.",
+          "Le formulaire de contact n'est pas encore configuré. Merci de m'écrire directement par e-mail."
+        )
       );
       return;
     }
@@ -67,10 +92,22 @@ export default function ContactSection2() {
     try {
       setSubmitting(true);
       await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, form.current, PUBLIC_KEY);
-      toast.success("Message sent — I'll get back to you within 24 hours.");
+      toast.success(
+        pick(
+          locale,
+          "Message sent — I'll get back to you within 24 hours.",
+          "Message envoyé — je reviens vers vous sous 24 heures."
+        )
+      );
       form.current.reset();
     } catch {
-      toast.error("Something went wrong. Please try again or email me directly.");
+      toast.error(
+        pick(
+          locale,
+          "Something went wrong. Please try again or email me directly.",
+          "Une erreur s'est produite. Réessayez ou écrivez-moi directement par e-mail."
+        )
+      );
     } finally {
       setSubmitting(false);
     }
@@ -83,7 +120,9 @@ export default function ContactSection2() {
       <div className="max-w-4xl mx-auto grid md:grid-cols-5 gap-12 items-start">
         {/* Left — form */}
         <div className="md:col-span-3">
-          <h2 className="text-2xl font-bold text-ink mb-6">Send a message</h2>
+          <h2 className="text-2xl font-bold text-ink mb-6">
+            {pick(locale, "Send a message", "Envoyer un message")}
+          </h2>
 
           {errorEntries.length > 0 && (
             <div
@@ -94,7 +133,11 @@ export default function ContactSection2() {
               className="mb-6 rounded-xl border border-red-200 bg-red-50 p-4"
             >
               <p id="form-error-title" className="text-sm font-semibold text-red-800">
-                There is a problem with your submission
+                {pick(
+                  locale,
+                  "There is a problem with your submission",
+                  "Il y a un problème avec votre envoi"
+                )}
               </p>
               <ul className="mt-2 list-disc pl-5 text-sm text-red-700">
                 {errorEntries.map(([key, msg]) => (
@@ -120,14 +163,14 @@ export default function ContactSection2() {
                   htmlFor="user_name"
                   className="block text-sm font-medium text-ink mb-1.5"
                 >
-                  Name
+                  {pick(locale, "Name", "Nom")}
                 </label>
                 <input
                   id="user_name"
                   name="user_name"
                   type="text"
                   autoComplete="name"
-                  placeholder="Your name"
+                  placeholder={pick(locale, "Your name", "Votre nom")}
                   aria-invalid={!!errors.user_name}
                   aria-describedby={errors.user_name ? "user_name-error" : undefined}
                   onInput={() => clearError("user_name")}
@@ -173,13 +216,17 @@ export default function ContactSection2() {
                 htmlFor="subject"
                 className="block text-sm font-medium text-ink mb-1.5"
               >
-                Subject
+                {pick(locale, "Subject", "Objet")}
               </label>
               <input
                 id="subject"
                 name="subject"
                 type="text"
-                placeholder="e.g. Remote contract, freelance project"
+                placeholder={pick(
+                  locale,
+                  "e.g. Remote contract, freelance project",
+                  "ex. Contrat remote, mission freelance"
+                )}
                 aria-invalid={!!errors.subject}
                 aria-describedby={errors.subject ? "subject-error" : undefined}
                 onInput={() => clearError("subject")}
@@ -197,13 +244,17 @@ export default function ContactSection2() {
                 htmlFor="message"
                 className="block text-sm font-medium text-ink mb-1.5"
               >
-                Message
+                {pick(locale, "Message", "Message")}
               </label>
               <textarea
                 id="message"
                 name="message"
                 rows={6}
-                placeholder="Tell me about your project, timeline, and budget…"
+                placeholder={pick(
+                  locale,
+                  "Tell me about your project, timeline, and budget…",
+                  "Parlez-moi de votre projet, du calendrier et du budget…"
+                )}
                 aria-invalid={!!errors.message}
                 aria-describedby={errors.message ? "message-error" : undefined}
                 onInput={() => clearError("message")}
@@ -227,11 +278,12 @@ export default function ContactSection2() {
                     aria-hidden="true"
                     className="h-4 w-4 rounded-full border-2 border-white/40 border-t-white animate-spin motion-reduce:animate-none"
                   />
-                  Sending…
+                  {pick(locale, "Sending…", "Envoi…")}
                 </>
               ) : (
                 <>
-                  Send message <LuArrowRight className="h-4 w-4" aria-hidden="true" />
+                  {pick(locale, "Send message", "Envoyer le message")}{" "}
+                  <LuArrowRight className="h-4 w-4" aria-hidden="true" />
                 </>
               )}
             </button>
@@ -241,7 +293,7 @@ export default function ContactSection2() {
         {/* Right — info */}
         <div className="md:col-span-2 flex flex-col gap-6">
           <div>
-            <p className="section-tag">Direct contact</p>
+            <p className="section-tag">{pick(locale, "Direct contact", "Contact direct")}</p>
             <div className="flex flex-col gap-3">
               <a
                 href="mailto:framchristerwintl@gmail.com"
@@ -272,7 +324,9 @@ export default function ContactSection2() {
                     Christ Erwin Fram
                   </span>
                 </span>
-                <span className="sr-only">(opens in a new tab)</span>
+                <span className="sr-only">
+                  ({pick(locale, "opens in a new tab", "ouvre un nouvel onglet")})
+                </span>
               </a>
               <a
                 href="tel:+2250153220544"
@@ -282,7 +336,9 @@ export default function ContactSection2() {
                   <LuPhone className="w-4 h-4" aria-hidden="true" />
                 </span>
                 <span>
-                  <span className="block text-xs text-ink-subtle">Phone</span>
+                  <span className="block text-xs text-ink-subtle">
+                    {pick(locale, "Phone", "Téléphone")}
+                  </span>
                   <span className="block text-sm font-medium text-ink">
                     +225 01 53 22 05 44
                   </span>
@@ -292,28 +348,52 @@ export default function ContactSection2() {
           </div>
 
           <div className="bg-black rounded-2xl p-6">
-            <p className="text-white font-semibold mb-1">How I work</p>
+            <p className="text-white font-semibold mb-1">
+              {pick(locale, "How I work", "Ma façon de travailler")}
+            </p>
             <ul className="text-white/70 text-sm flex flex-col gap-1.5">
-              <li>Reply within 24 hours on business days</li>
-              <li>Based in GMT (UTC+0) — async-first, overlap with EU &amp; US</li>
+              <li>
+                {pick(
+                  locale,
+                  "Reply within 24 hours on business days",
+                  "Réponse sous 24 heures les jours ouvrés"
+                )}
+              </li>
+              <li>
+                {pick(
+                  locale,
+                  "Based in GMT (UTC+0) — async-first, overlap with EU & US",
+                  "Basé en GMT (UTC+0) — async-first, chevauchement avec l'Europe & les US"
+                )}
+              </li>
               <li>Figma-native · Notion, Slack, Linear, Jira</li>
             </ul>
             <div className="mt-4 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-green-400 motion-safe:animate-pulse" />
               <span className="text-green-300 text-xs font-medium">
-                Available for new projects
+                {pick(locale, "Available for new projects", "Disponible pour de nouveaux projets")}
               </span>
             </div>
           </div>
 
           <div className="bg-surface-alt rounded-2xl p-5">
-            <p className="font-semibold text-ink mb-3 text-sm">I&apos;m open to</p>
+            <p className="font-semibold text-ink mb-3 text-sm">
+              {pick(locale, "I'm open to", "Je suis ouvert à")}
+            </p>
             <ul className="flex flex-col gap-1.5">
               {[
-                "Remote contracts (part or full time)",
-                "Freelance missions (short or long term)",
-                "Full-time remote roles",
-                "Collaborations with agencies",
+                pick(
+                  locale,
+                  "Remote contracts (part or full time)",
+                  "Contrats remote (temps partiel ou plein)"
+                ),
+                pick(
+                  locale,
+                  "Freelance missions (short or long term)",
+                  "Missions freelance (courtes ou longues)"
+                ),
+                pick(locale, "Full-time remote roles", "Postes remote à temps plein"),
+                pick(locale, "Collaborations with agencies", "Collaborations avec des agences"),
               ].map((t) => (
                 <li key={t} className="text-ink-muted text-xs">
                   → {t}

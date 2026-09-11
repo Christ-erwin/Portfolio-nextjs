@@ -3,6 +3,7 @@ import Link from "next/link";
 import { FaLinkedin } from "react-icons/fa";
 import { TbBrandDribbbleFilled } from "react-icons/tb";
 import { FaGithub, FaBehance } from "react-icons/fa6";
+import { pick, type Locale } from "@/lib/locale";
 
 const socials = [
   {
@@ -23,7 +24,7 @@ const socials = [
   { icon: FaGithub, url: "https://github.com/Christ-erwin", label: "GitHub" },
 ];
 
-export default function Footer() {
+export default function Footer({ locale }: { locale: Locale }) {
   return (
     <footer className="w-full bg-black px-6 py-10">
       <div className="max-w-6xl mx-auto flex flex-wrap justify-between items-center gap-6">
@@ -31,7 +32,8 @@ export default function Footer() {
           CE<span className="grad-text">.FRAM</span>
         </Link>
         <p className="text-white/70 text-sm">
-          © {new Date().getFullYear()} Christ Erwin Fram. All rights reserved.
+          © {new Date().getFullYear()} Christ Erwin Fram.{" "}
+          {pick(locale, "All rights reserved.", "Tous droits réservés.")}
         </p>
         <ul className="flex items-center gap-1">
           {socials.map((s) => {
@@ -42,7 +44,11 @@ export default function Footer() {
                   href={s.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label={`${s.label} (opens in a new tab)`}
+                  aria-label={`${s.label} (${pick(
+                    locale,
+                    "opens in a new tab",
+                    "ouvre un nouvel onglet"
+                  )})`}
                   className="flex items-center justify-center w-11 h-11 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-colors duration-200"
                 >
                   <Icon className="w-5 h-5" aria-hidden="true" />

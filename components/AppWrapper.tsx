@@ -6,8 +6,15 @@ import Menu from "@/components/Menu";
 import Footer from "@/components/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { pick, type Locale } from "@/lib/locale";
 
-export default function AppWrapper({ children }: { children: React.ReactNode }) {
+export default function AppWrapper({
+  locale,
+  children,
+}: {
+  locale: Locale;
+  children: React.ReactNode;
+}) {
   const pathname = usePathname();
   const reduceMotion = useReducedMotion();
 
@@ -17,9 +24,9 @@ export default function AppWrapper({ children }: { children: React.ReactNode }) 
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-ink focus:shadow-lg"
       >
-        Skip to content
+        {pick(locale, "Skip to content", "Aller au contenu")}
       </a>
-      <Menu />
+      <Menu locale={locale} />
       <AnimatePresence mode="wait" initial={false}>
         <motion.main
           id="main"
@@ -33,7 +40,7 @@ export default function AppWrapper({ children }: { children: React.ReactNode }) 
           {children}
         </motion.main>
       </AnimatePresence>
-      <Footer />
+      <Footer locale={locale} />
       <ToastContainer
         position="top-right"
         autoClose={4000}

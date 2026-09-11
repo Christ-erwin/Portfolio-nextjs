@@ -10,6 +10,7 @@ import {
   LuExternalLink,
 } from "react-icons/lu";
 import type { IconType } from "react-icons";
+import { pick, type Locale } from "@/lib/locale";
 
 const socials = [
   {
@@ -44,40 +45,59 @@ const socials = [
   },
 ];
 
-const services: { icon: IconType; title: string; desc: string }[] = [
-  {
-    icon: LuSearch,
-    title: "UX Research",
-    desc: "User interviews, competitive analysis, usability audits to understand the problem before solving it.",
-  },
-  {
-    icon: LuPalette,
-    title: "UI Design",
-    desc: "High-fidelity mockups, design systems, and interactive Figma prototypes ready for handoff.",
-  },
-  {
-    icon: LuCodeXml,
-    title: "Frontend Dev",
-    desc: "React Native, React JS, Tailwind — I implement designs with precision and speed.",
-  },
-  {
-    icon: LuComponent,
-    title: "Design Systems",
-    desc: "Scalable component libraries that keep products consistent as they grow.",
-  },
-];
+export default function HomeSection2({ locale }: { locale: Locale }) {
+  const services: { icon: IconType; title: string; desc: string }[] = [
+    {
+      icon: LuSearch,
+      title: pick(locale, "UX Research", "Recherche UX"),
+      desc: pick(
+        locale,
+        "User interviews, competitive analysis, usability audits to understand the problem before solving it.",
+        "Interviews utilisateurs, analyse concurrentielle, audits d'utilisabilité pour comprendre le problème avant de le résoudre."
+      ),
+    },
+    {
+      icon: LuPalette,
+      title: pick(locale, "UI Design", "Design UI"),
+      desc: pick(
+        locale,
+        "High-fidelity mockups, design systems, and interactive Figma prototypes ready for handoff.",
+        "Maquettes haute-fidélité, design systems et prototypes Figma interactifs prêts pour le handoff."
+      ),
+    },
+    {
+      icon: LuCodeXml,
+      title: pick(locale, "Frontend Dev", "Développement Frontend"),
+      desc: pick(
+        locale,
+        "React Native, React JS, Tailwind — I implement designs with precision and speed.",
+        "React Native, React JS, Tailwind — j'implémente les designs avec précision et rapidité."
+      ),
+    },
+    {
+      icon: LuComponent,
+      title: pick(locale, "Design Systems", "Design Systems"),
+      desc: pick(
+        locale,
+        "Scalable component libraries that keep products consistent as they grow.",
+        "Des bibliothèques de composants évolutives qui gardent les produits cohérents à mesure qu'ils grandissent."
+      ),
+    },
+  ];
 
-export default function HomeSection2() {
   return (
     <section className="w-full bg-surface-alt py-20 px-6">
       <div className="max-w-6xl mx-auto flex flex-col gap-20">
         {/* Services */}
         <div>
-          <p className="section-tag">What I do</p>
+          <p className="section-tag">{pick(locale, "What I do", "Ce que je fais")}</p>
           <h2 className="text-3xl md:text-4xl font-bold text-ink mb-10 max-w-lg">
-            Design that&apos;s beautiful
+            {pick(locale, "Design that's beautiful", "Un design à la fois beau")}
             <br />
-            and <span className="grad-text">buildable</span>
+            {pick(locale, "and ", "et ")}
+            <span className="grad-text">
+              {pick(locale, "buildable", "réalisable")}
+            </span>
           </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.map((s) => {
@@ -104,7 +124,7 @@ export default function HomeSection2() {
 
         {/* Find me on */}
         <div>
-          <p className="section-tag">Find me on</p>
+          <p className="section-tag">{pick(locale, "Find me on", "Retrouvez-moi sur")}</p>
           <ul className="flex flex-wrap gap-3">
             {socials.map((s) => {
               const Icon = s.icon;
@@ -128,7 +148,9 @@ export default function HomeSection2() {
                       className="w-3.5 h-3.5 text-ink-subtle"
                       aria-hidden="true"
                     />
-                    <span className="sr-only">(opens in a new tab)</span>
+                    <span className="sr-only">
+                      ({pick(locale, "opens in a new tab", "ouvre un nouvel onglet")})
+                    </span>
                   </a>
                 </li>
               );

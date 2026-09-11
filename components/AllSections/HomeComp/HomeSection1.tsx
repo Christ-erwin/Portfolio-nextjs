@@ -4,17 +4,12 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { LuPalette, LuCodeXml, LuGlobe, LuMapPin } from "react-icons/lu";
 import { FcGoogle } from "react-icons/fc";
-
-const stats = [
-  { value: "4+", label: "Years experience" },
-  { value: "10+", label: "Projects delivered" },
-  { value: "4", label: "Companies" },
-];
+import { pick, type Locale } from "@/lib/locale";
 
 const PHOTO =
   "https://res.cloudinary.com/docanichi/image/upload/v1752175194/myFace_wuyvpn.jpg";
 
-export default function HomeSection1() {
+export default function HomeSection1({ locale }: { locale: Locale }) {
   const reduceMotion = useReducedMotion();
   const rise = (delay: number) =>
     reduceMotion
@@ -24,6 +19,12 @@ export default function HomeSection1() {
           animate: { opacity: 1, y: 0 },
           transition: { duration: 0.6, delay, ease: "easeOut" as const },
         };
+
+  const stats = [
+    { value: "4+", label: pick(locale, "Years experience", "Ans d'expérience") },
+    { value: "10+", label: pick(locale, "Projects delivered", "Projets livrés") },
+    { value: "4", label: pick(locale, "Companies", "Entreprises") },
+  ];
 
   return (
     <section className="w-full min-h-[calc(100vh-4rem)] flex items-center justify-center px-6 pt-24 pb-16 bg-surface">
@@ -35,29 +36,36 @@ export default function HomeSection1() {
               <Image src={PHOTO} alt="" fill sizes="32px" className="object-cover" />
             </span>
             <span className="text-sm text-ink-subtle font-medium">
-              Available for remote work
+              {pick(locale, "Available for remote work", "Disponible en remote")}
             </span>
             <span className="w-2 h-2 rounded-full bg-green-500 motion-safe:animate-pulse" />
           </div>
 
           <h1 className="text-4xl md:text-5xl font-bold text-ink leading-[1.1] tracking-tight text-balance">
-            UI/UX Designer
+            {pick(locale, "UI/UX Designer", "Designer UI/UX")}
             <br />
-            <span className="grad-text">&amp; Full-Stack Web &amp; Mobile Developer</span>
+            <span className="grad-text">
+              {pick(
+                locale,
+                "& Full-Stack Web & Mobile Developer",
+                "& Développeur Full-Stack Web & Mobile"
+              )}
+            </span>
           </h1>
 
           <p className="text-ink-muted text-lg leading-relaxed max-w-md">
-            I&apos;m a product designer who ships. I hand engineering teams work
-            that builds without friction — because I&apos;ve been the engineer.
-            From UX research to React Native, across fintech, telecom and
-            consumer apps.
+            {pick(
+              locale,
+              "I'm a product designer who ships. I hand engineering teams work that builds without friction — because I've been the engineer. From UX research to React Native, across fintech, telecom and consumer apps.",
+              "Je suis un product designer qui livre. Je fournis aux équipes d'ingénierie un travail qui se construit sans friction — parce que j'ai été l'ingénieur. De la recherche UX à React Native, dans la fintech, le télécom et le grand public."
+            )}
           </p>
 
           <div className="flex items-center gap-2 text-sm text-ink-subtle font-medium">
             <LuMapPin className="w-4 h-4" aria-hidden="true" />
             <span>Abidjan, Côte d&apos;Ivoire</span>
             <span aria-hidden="true">·</span>
-            <span>Remote worldwide</span>
+            <span>{pick(locale, "Remote worldwide", "Remote dans le monde")}</span>
           </div>
 
           <div className="flex flex-wrap gap-3 mt-2">
@@ -65,13 +73,13 @@ export default function HomeSection1() {
               href="/projects"
               className="grad-bg text-white font-semibold px-7 py-3.5 rounded-full text-sm"
             >
-              View my work
+              {pick(locale, "View my work", "Voir mes projets")}
             </Link>
             <Link
               href="/contact"
               className="text-sm font-semibold text-ink border border-ink/15 px-7 py-3.5 rounded-full hover:bg-surface-alt transition-colors"
             >
-              Contact me
+              {pick(locale, "Contact me", "Me contacter")}
             </Link>
           </div>
 
@@ -96,20 +104,25 @@ export default function HomeSection1() {
             className="inline-flex items-center gap-2 text-xs font-semibold text-ink-subtle hover:text-ink transition-colors"
           >
             <FcGoogle className="w-4 h-4" aria-hidden="true" />
-            Google UX Design Certified
+            {pick(
+              locale,
+              "Google UX Design Certified",
+              "Certifié Google UX Design"
+            )}
           </Link>
         </motion.div>
 
         {/* RIGHT — photo + tags */}
-        <motion.div
-          className="relative flex justify-center"
-          {...rise(0.15)}
-        >
+        <motion.div className="relative flex justify-center" {...rise(0.15)}>
           <div className="relative">
             <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-3xl overflow-hidden border-4 border-white shadow-2xl">
               <Image
                 src={PHOTO}
-                alt="Portrait of Christ Erwin Fram"
+                alt={pick(
+                  locale,
+                  "Portrait of Christ Erwin Fram",
+                  "Portrait de Christ Erwin Fram"
+                )}
                 fill
                 priority
                 sizes="(max-width: 768px) 16rem, 20rem"
@@ -120,7 +133,7 @@ export default function HomeSection1() {
             <div className="absolute -top-4 -right-2 sm:-right-4 bg-white border border-line rounded-2xl shadow-lg px-4 py-2.5">
               <p className="flex items-center gap-2 text-xs font-semibold text-ink">
                 <LuPalette className="w-4 h-4 text-brand" aria-hidden="true" />
-                UI/UX Design
+                {pick(locale, "UI/UX Design", "Design UI/UX")}
               </p>
             </div>
             <div className="absolute -bottom-4 -left-2 sm:-left-4 bg-white border border-line rounded-2xl shadow-lg px-4 py-2.5">
@@ -132,7 +145,7 @@ export default function HomeSection1() {
             <div className="absolute top-1/2 -right-4 sm:-right-8 bg-black rounded-2xl shadow-lg px-4 py-2.5">
               <p className="flex items-center gap-2 text-xs font-semibold text-white">
                 <LuGlobe className="w-4 h-4" aria-hidden="true" />
-                Remote-ready
+                {pick(locale, "Remote-ready", "Prêt pour le remote")}
               </p>
             </div>
           </div>

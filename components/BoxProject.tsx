@@ -2,12 +2,14 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { LuArrowRight } from "react-icons/lu";
+import { pick, type Locale } from "@/lib/locale";
 
 interface ProjectCardProps {
   backgroundImage: string;
   title: string;
   description: string;
   link: string;
+  locale: Locale;
   featured?: boolean;
   priority?: boolean;
 }
@@ -17,6 +19,7 @@ const BoxProject: React.FC<ProjectCardProps> = ({
   title,
   description,
   link,
+  locale,
   featured = false,
   priority = false,
 }) => {
@@ -25,7 +28,7 @@ const BoxProject: React.FC<ProjectCardProps> = ({
   return (
     <Link
       href={link}
-      aria-label={`${title} — view case study`}
+      aria-label={`${title} — ${pick(locale, "view case study", "voir l'étude de cas")}`}
       className={`group relative block w-full overflow-hidden rounded-3xl ${
         featured ? "min-h-[26rem] md:min-h-[30rem]" : "min-h-[22rem] md:min-h-[24rem]"
       }`}
@@ -46,7 +49,7 @@ const BoxProject: React.FC<ProjectCardProps> = ({
         <div>
           {featured && (
             <span className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/15 px-3.5 py-1.5 text-xs font-semibold text-white backdrop-blur-sm">
-              Featured project
+              {pick(locale, "Featured project", "Projet phare")}
             </span>
           )}
         </div>
@@ -65,7 +68,8 @@ const BoxProject: React.FC<ProjectCardProps> = ({
             aria-hidden="true"
             className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-ink transition-transform duration-300 group-hover:translate-x-1"
           >
-            View case study <LuArrowRight className="h-4 w-4" />
+            {pick(locale, "View case study", "Voir l'étude de cas")}{" "}
+            <LuArrowRight className="h-4 w-4" />
           </span>
         </div>
       </div>
