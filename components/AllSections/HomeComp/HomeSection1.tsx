@@ -7,7 +7,7 @@ import { FcGoogle } from "react-icons/fc";
 import { pick, type Locale } from "@/lib/locale";
 
 const PHOTO =
-  "https://res.cloudinary.com/docanichi/image/upload/v1752175194/myFace_wuyvpn.jpg";
+  "https://res.cloudinary.com/docanichi/image/upload/v1789246164/66F78270-AA55-4D3A-8BD9-2DCCA7288143_elif3h.png";
 
 export default function HomeSection1({ locale }: { locale: Locale }) {
   const reduceMotion = useReducedMotion();
