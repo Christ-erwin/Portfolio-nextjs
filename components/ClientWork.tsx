@@ -13,7 +13,7 @@ type Engagement = {
 const engagements: Engagement[] = [
   {
     company: "Orange Côte d'Ivoire",
-    period: "2026 – Present",
+    period: "2026",
     role: { en: "UI/UX Designer (via Synelia)", fr: "UI/UX Designer (via Synelia)" },
     domain: { en: "Telecom · self-service", fr: "Télécom · self-service" },
     work: {

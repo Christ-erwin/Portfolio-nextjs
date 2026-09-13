@@ -71,7 +71,7 @@ const experience: {
   desc: BiText;
 }[] = [
   {
-    period: "2026 – Present",
+    period: "2026",
     role: { en: "UI/UX Designer", fr: "UI/UX Designer" },
     co: "Orange Côte d'Ivoire (via Synelia)",
     desc: {
