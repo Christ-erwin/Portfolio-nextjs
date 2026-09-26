@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "todos": "grep -rnE --include='*.ts' --include='*.tsx' '\\[À COMPLÉTER|todo\\(\"' app components lib | grep -v 'lib/draft.ts' || echo 'Aucun marqueur restant.'"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

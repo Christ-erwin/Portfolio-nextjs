@@ -9,6 +9,8 @@ type PageHeroProps = {
   imageAlt?: string;
   priority?: boolean;
   tags?: string[];
+  /** Optional pill shown above the eyebrow (e.g. "Concept redesign"). */
+  badge?: string;
 };
 
 /**
@@ -24,6 +26,7 @@ export default function PageHero({
   imageAlt = "",
   priority = false,
   tags,
+  badge,
 }: PageHeroProps) {
   return (
     <section className="relative w-full min-h-[26rem] md:min-h-[32rem] flex items-end px-6 pb-16 pt-32 overflow-hidden">
@@ -38,6 +41,11 @@ export default function PageHero({
       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/35" />
 
       <div className="relative max-w-6xl w-full mx-auto">
+        {badge && (
+          <span className="mb-4 inline-block rounded-full border border-white/25 bg-white/15 px-4 py-1.5 text-xs font-semibold text-white backdrop-blur-sm">
+            {badge}
+          </span>
+        )}
         <p className="section-tag !text-white/80">{eyebrow}</p>
         <h1 className="text-4xl md:text-6xl font-bold text-white max-w-2xl leading-[1.1]">
           {title}

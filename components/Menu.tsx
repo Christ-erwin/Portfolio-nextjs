@@ -92,7 +92,6 @@ export default function Menu({ locale }: { locale: Locale }) {
             alt="Christ Erwin Fram"
             width={132}
             height={40}
-            priority
             className="h-10 w-auto"
           />
         </Link>

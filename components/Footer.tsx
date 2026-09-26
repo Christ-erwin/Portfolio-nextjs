@@ -31,9 +31,14 @@ export default function Footer({ locale }: { locale: Locale }) {
         <Link href="/" className="text-white font-bold text-lg">
           CE<span className="grad-text">.FRAM</span>
         </Link>
-        <p className="text-white/70 text-sm">
-          © {new Date().getFullYear()} Christ Erwin Fram.{" "}
-          {pick(locale, "All rights reserved.", "Tous droits réservés.")}
+        <p className="text-white/70 text-sm flex flex-wrap items-center justify-center gap-x-2">
+          <span>
+            © {new Date().getFullYear()} Christ Erwin Fram.{" "}
+            {pick(locale, "All rights reserved.", "Tous droits réservés.")}
+          </span>
+          <Link href="/legal" className="underline hover:text-white transition-colors">
+            {pick(locale, "Privacy", "Confidentialité")}
+          </Link>
         </p>
         <ul className="flex items-center gap-1">
           {socials.map((s) => {

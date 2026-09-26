@@ -3,18 +3,10 @@ import HomeLinkSection1 from "@/components/AllSousSections/HomeLinkComp/HomeLink
 import HomeLinkSection2 from "@/components/AllSousSections/HomeLinkComp/HomeLinkSection2";
 import PreFooter from "@/components/PreFooter";
 import { getLocale } from "@/lib/locale.server";
-import { pick } from "@/lib/locale";
+import { projectMetadata } from "@/lib/projects";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale();
-  return {
-    title: pick(locale, "HomeLink — Smart Home App", "HomeLink — App maison connectée"),
-    description: pick(
-      locale,
-      "Full product design for a smart home app — buy, install and control connected devices from one place. UX research to final UI.",
-      "Design produit complet pour une app maison connectée — acheter, installer et contrôler des appareils connectés depuis un seul endroit. De la recherche UX à l'UI finale."
-    ),
-  };
+  return projectMetadata("homelink", await getLocale());
 }
 
 export default async function HomeLinkPage() {

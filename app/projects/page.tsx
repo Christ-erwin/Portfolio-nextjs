@@ -5,17 +5,20 @@ import ClientWork from "@/components/ClientWork";
 import PreFooter from "@/components/PreFooter";
 import { getLocale } from "@/lib/locale.server";
 import { pick } from "@/lib/locale";
+import { pageMetadata } from "@/lib/projects";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
-  return {
+  return pageMetadata({
+    path: "/projects",
+    locale,
     title: pick(locale, "Projects", "Projets"),
     description: pick(
       locale,
       "One client project and four self-initiated case studies — problem, constraints, decisions and how I measure success. Client work for Orange, Yoomi and Dughu summarised under NDA.",
       "Un projet client et quatre études de cas auto-initiées — problème, contraintes, décisions et mesure du succès. Travail client pour Orange, Yoomi et Dughu résumé sous NDA."
     ),
-  };
+  });
 }
 
 export default async function ProjectsPage() {

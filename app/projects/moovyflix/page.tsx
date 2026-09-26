@@ -3,22 +3,10 @@ import MoovyFlixSection1 from "@/components/AllSousSections/MoovyFlix/MoovyFlixS
 import MoovyFlixSection2 from "@/components/AllSousSections/MoovyFlix/MoovyFlixSection2";
 import PreFooter from "@/components/PreFooter";
 import { getLocale } from "@/lib/locale.server";
-import { pick } from "@/lib/locale";
+import { projectMetadata } from "@/lib/projects";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale();
-  return {
-    title: pick(
-      locale,
-      "MoovyFlix — Streaming App Concept",
-      "MoovyFlix — Concept d'app de streaming"
-    ),
-    description: pick(
-      locale,
-      "Designing a modern streaming experience from scratch — immersive, personalized and intuitive.",
-      "Concevoir une expérience de streaming moderne de zéro — immersive, personnalisée et intuitive."
-    ),
-  };
+  return projectMetadata("moovyflix", await getLocale());
 }
 
 export default async function MoovyFlixPage() {

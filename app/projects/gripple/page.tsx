@@ -3,18 +3,10 @@ import GrippleSection1 from "@/components/AllSousSections/GrippleComp/GrippleSec
 import GrippleSection2 from "@/components/AllSousSections/GrippleComp/GrippleSection2";
 import PreFooter from "@/components/PreFooter";
 import { getLocale } from "@/lib/locale.server";
-import { pick } from "@/lib/locale";
+import { projectMetadata } from "@/lib/projects";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale();
-  return {
-    title: pick(locale, "Gripple — Social Network Concept", "Gripple — Concept de réseau social"),
-    description: pick(
-      locale,
-      "A minimalist social network designed for meaningful, distraction-free interaction.",
-      "Un réseau social minimaliste conçu pour des interactions sincères, sans distraction."
-    ),
-  };
+  return projectMetadata("gripple", await getLocale());
 }
 
 export default async function GripplePage() {

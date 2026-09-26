@@ -12,6 +12,8 @@ interface ProjectCardProps {
   locale: Locale;
   featured?: boolean;
   priority?: boolean;
+  /** Extra pill shown top-left (e.g. "Concept redesign"). */
+  badge?: string;
 }
 
 const BoxProject: React.FC<ProjectCardProps> = ({
@@ -22,6 +24,7 @@ const BoxProject: React.FC<ProjectCardProps> = ({
   locale,
   featured = false,
   priority = false,
+  badge,
 }) => {
   const lines = description.split("\n");
 
@@ -46,10 +49,15 @@ const BoxProject: React.FC<ProjectCardProps> = ({
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/10" />
 
       <div className="absolute inset-0 flex flex-col justify-between p-6 sm:p-8">
-        <div>
+        <div className="flex flex-wrap gap-2">
           {featured && (
             <span className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/15 px-3.5 py-1.5 text-xs font-semibold text-white backdrop-blur-sm">
               {pick(locale, "Featured project", "Projet phare")}
+            </span>
+          )}
+          {badge && (
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/15 px-3.5 py-1.5 text-xs font-semibold text-white backdrop-blur-sm">
+              {badge}
             </span>
           )}
         </div>

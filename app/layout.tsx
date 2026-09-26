@@ -4,6 +4,7 @@ import { Outfit } from "next/font/google";
 import "./globals.css";
 
 import AppWrapper from "@/components/AppWrapper";
+import StructuredData from "@/components/StructuredData";
 import { getLocale } from "@/lib/locale.server";
 import { pick } from "@/lib/locale";
 import { SITE_URL } from "@/lib/site";
@@ -58,7 +59,7 @@ export async function generateMetadata(): Promise<Metadata> {
     authors: [{ name: "Christ Erwin Fram" }],
     creator: "Christ Erwin Fram",
     icons: { icon: "/favicon.ico" },
-    alternates: { languages: { en: siteUrl, fr: siteUrl } },
+    // No hreflang alternates: FR/EN share the same URL (locale comes from a cookie).
     openGraph: {
       type: "website",
       locale: pick(locale, "en_US", "fr_FR"),
@@ -88,6 +89,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} className={outfit.variable}>
       <body>
+        <StructuredData />
         <AppWrapper locale={locale}>{children}</AppWrapper>
         <Analytics />
       </body>

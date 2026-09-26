@@ -169,15 +169,85 @@ const states: { icon: IconType; state: BiText; color: string }[] = [
   },
 ];
 
+const architectureNote: BiText = {
+  en: "Onboarding isn't a permanent tab: it's the guided setup flow, launched right after a purchase in the Store or whenever a new device is added. The Store sits at the same level as Home because buying devices is how the home grows — commerce is one of the three experiences the app brings together.",
+  fr: "L'onboarding n'est pas un onglet permanent : c'est le parcours de configuration guidée, lancé juste après un achat dans la boutique ou à chaque ajout d'un nouvel appareil. La boutique est au même niveau que l'accueil car c'est en achetant des appareils que la maison s'agrandit — le commerce est l'une des trois expériences que l'app réunit.",
+};
+
+type Decision = { title: BiText; problem: BiText; options: BiText; choice: BiText; why: BiText };
+
+const decisions: Decision[] = [
+  {
+    title: { en: "From purchase straight into setup", fr: "De l'achat directement à l'installation" },
+    problem: {
+      en: "Once a device is bought, installing it is a separate, technical task — the moment where users are most likely to drop off.",
+      fr: "Une fois l'appareil acheté, l'installer est une tâche séparée et technique — le moment où l'utilisateur risque le plus de décrocher.",
+    },
+    options: {
+      en: "Leave setup to a separate section users find on their own later, or hand them over to it right after checkout.",
+      fr: "Laisser l'installation dans une section à retrouver plus tard, ou y emmener l'utilisateur juste après le paiement.",
+    },
+    choice: {
+      en: "After purchase, the app leads directly into the guided onboarding flow for that device.",
+      fr: "Après l'achat, l'app mène directement au parcours d'onboarding guidé pour cet appareil.",
+    },
+    why: {
+      en: "It keeps the user's momentum and removes the jarring switch from shopping logic to setup logic identified as the main UX risk.",
+      fr: "Cela préserve l'élan de l'utilisateur et supprime la rupture entre logique d'achat et logique d'installation, identifiée comme principal risque UX.",
+    },
+  },
+  {
+    title: { en: "The Store as a main tab", fr: "La boutique en onglet principal" },
+    problem: {
+      en: "Commerce is one of the three core experiences, but a smart home app is mostly used for daily control.",
+      fr: "Le commerce est l'une des trois expériences clés, mais une app domotique sert surtout au contrôle quotidien.",
+    },
+    options: {
+      en: "Tuck the Store away in a secondary menu, or give it a top-level tab next to Home.",
+      fr: "Ranger la boutique dans un menu secondaire, ou lui donner un onglet principal à côté de l'accueil.",
+    },
+    choice: {
+      en: "The Store is one of the main sections, at the same level as Home, while Home stays the default screen.",
+      fr: "La boutique est l'une des sections principales, au même niveau que l'accueil, qui reste l'écran par défaut.",
+    },
+    why: {
+      en: "Adding devices is how the home grows over time; keeping the Store one tap away supports an interface built to scale from 1 device to 30.",
+      fr: "C'est en ajoutant des appareils que la maison évolue ; garder la boutique à un tap accompagne une interface pensée pour passer d'1 à 30 appareils.",
+    },
+  },
+  {
+    title: { en: "Automations, one step at a time", fr: "Les automatisations, étape par étape" },
+    problem: {
+      en: "Automations are the most powerful feature, and the most intimidating one for non-technical users.",
+      fr: "Les automatisations sont la fonctionnalité la plus puissante, et la plus intimidante pour les non-techniciens.",
+    },
+    options: {
+      en: "A single form exposing every trigger and action at once, or a creation flow split into small steps.",
+      fr: "Un formulaire unique exposant tous les déclencheurs et actions, ou un parcours de création découpé en petites étapes.",
+    },
+    choice: {
+      en: "A step-by-step flow in plain language with visual cues, one decision per screen.",
+      fr: "Un parcours étape par étape, en langage simple avec des repères visuels, une décision par écran.",
+    },
+    why: {
+      en: "It applies the Progressivity principle: complex features are revealed gradually, so users build automations with confidence.",
+      fr: "C'est le principe de progressivité : les fonctionnalités complexes se dévoilent progressivement, pour que chacun crée ses automatisations en confiance.",
+    },
+  },
+];
+
 export default function HomeLinkSection2({ locale }: { locale: Locale }) {
   const t = (b: BiText) => pick(locale, b.en, b.fr);
+
+  let stepCount = 0;
+  const step = () => String(++stepCount).padStart(2, "0");
 
   return (
     <div className="w-full h-auto bg-surface rounded-t-[80px] flex flex-col gap-16 px-6 py-16 md:px-[5%]">
       <div className="max-w-5xl mx-auto w-full flex flex-col gap-16">
-        {/* 01 · Project Overview */}
+        {/* Project Overview */}
         <section className="flex flex-col gap-5">
-          <Step n="01">{pick(locale, "Project Overview", "Vue d'ensemble du projet")}</Step>
+          <Step n={step()}>{pick(locale, "Project Overview", "Vue d'ensemble du projet")}</Step>
           <Snapshot
             locale={locale}
             role={pick(
@@ -186,7 +256,7 @@ export default function HomeLinkSection2({ locale }: { locale: Locale }) {
               "Product Designer solo — de la recherche à l'UI finale"
             )}
             timeline={pick(locale, "Client engagement", "Mission client")}
-            type={pick(locale, "Client project · Pommy", "Projet client · Pommy")}
+            type={pick(locale, "Client project", "Projet client")}
             platform="iOS & Android (React Native)"
             status={pick(locale, "Delivered to development", "Livré au développement")}
             links={[
@@ -196,15 +266,15 @@ export default function HomeLinkSection2({ locale }: { locale: Locale }) {
           <p className="text-ink-muted leading-relaxed mt-2">
             {pick(
               locale,
-              "HomeLink is a mobile application that transforms any home into a smart home. It unifies three distinct experiences — buying connected devices, installing them, and controlling them daily — into a single, coherent product. I led the full design process solo, from initial UX research to the final UI delivered to development. Screens are published with the client's permission.",
-              "HomeLink est une application mobile qui transforme n'importe quelle maison en maison connectée. Elle unifie trois expériences distinctes — acheter des appareils connectés, les installer et les contrôler au quotidien — en un produit unique et cohérent. J'ai mené seul tout le processus de design, de la recherche UX initiale jusqu'à l'UI finale livrée au développement. Les écrans sont publiés avec l'autorisation du client."
+              "HomeLink is a mobile application that transforms any home into a smart home. It unifies three distinct experiences — buying connected devices, installing them, and controlling them daily — into a single, coherent product. I led the full design process solo, from product discovery to the final UI delivered to development. Screens are published with the client's permission.",
+              "HomeLink est une application mobile qui transforme n'importe quelle maison en maison connectée. Elle unifie trois expériences distinctes — acheter des appareils connectés, les installer et les contrôler au quotidien — en un produit unique et cohérent. J'ai mené seul tout le processus de design, de la découverte produit jusqu'à l'UI finale livrée au développement. Les écrans sont publiés avec l'autorisation du client."
             )}
           </p>
         </section>
 
-        {/* 02 · The Challenge */}
+        {/* The Challenge */}
         <section className="flex flex-col gap-5">
-          <Step n="02">{pick(locale, "The Challenge", "Le défi")}</Step>
+          <Step n={step()}>{pick(locale, "The Challenge", "Le défi")}</Step>
           <p className="text-ink-muted leading-relaxed">
             {pick(
               locale,
@@ -235,9 +305,9 @@ export default function HomeLinkSection2({ locale }: { locale: Locale }) {
           </div>
         </section>
 
-        {/* 03 · UX Research */}
+        {/* Discovery */}
         <section className="flex flex-col gap-5">
-          <Step n="03">{pick(locale, "UX Research & User Persona", "Recherche UX & persona")}</Step>
+          <Step n={step()}>{pick(locale, "Discovery & User Persona", "Découverte & persona")}</Step>
           <div className="flex flex-wrap md:flex-nowrap gap-8 items-start">
             <div className="flex-1 flex flex-col gap-4">
               <p className="text-ink-muted leading-relaxed">
@@ -332,9 +402,9 @@ export default function HomeLinkSection2({ locale }: { locale: Locale }) {
           </div>
         </section>
 
-        {/* 04 · User Journey */}
+        {/* User Journey */}
         <section className="flex flex-col gap-5">
-          <Step n="04">
+          <Step n={step()}>
             {pick(locale, "User Journey & Information Architecture", "Parcours utilisateur & architecture de l'information")}
           </Step>
           <p className="text-ink-muted leading-relaxed">
@@ -388,6 +458,10 @@ export default function HomeLinkSection2({ locale }: { locale: Locale }) {
                 </div>
               ))}
             </div>
+            <p className="mt-4 text-sm text-ink-muted leading-relaxed">
+              <span className="font-semibold text-ink">{pick(locale, "Note: ", "Note : ")}</span>
+              {t(architectureNote)}
+            </p>
           </div>
           <div className="flex justify-center mt-4">
             <Image
@@ -405,9 +479,9 @@ export default function HomeLinkSection2({ locale }: { locale: Locale }) {
           </div>
         </section>
 
-        {/* 05 · Design System */}
+        {/* Design System */}
         <section className="flex flex-col gap-5">
-          <Step n="05">{pick(locale, "Design Principles & System", "Principes & système de design")}</Step>
+          <Step n={step()}>{pick(locale, "Design Principles & System", "Principes & système de design")}</Step>
           <div className="grid md:grid-cols-3 gap-6">
             {principles.map((p) => (
               <div key={p.title.en} className="bg-surface-alt rounded-2xl p-5">
@@ -432,9 +506,38 @@ export default function HomeLinkSection2({ locale }: { locale: Locale }) {
           </div>
         </section>
 
-        {/* 06 · Key Screens */}
+        {/* Key Design Decisions */}
         <section className="flex flex-col gap-5">
-          <Step n="06">{pick(locale, "Key Screens", "Écrans clés")}</Step>
+          <Step n={step()}>{pick(locale, "Key Design Decisions", "Décisions de design clés")}</Step>
+          <div className="grid md:grid-cols-3 gap-6">
+            {decisions.map((d, i) => (
+              <article key={i} className="border border-line rounded-2xl p-5 flex flex-col gap-3">
+                <h3 className="font-bold text-ink text-lg">{t(d.title)}</h3>
+                <dl className="flex flex-col gap-3 text-sm">
+                  {(
+                    [
+                      [pick(locale, "Problem", "Problème"), d.problem],
+                      [pick(locale, "Options considered", "Options envisagées"), d.options],
+                      [pick(locale, "Decision", "Choix"), d.choice],
+                      [pick(locale, "Why", "Pourquoi"), d.why],
+                    ] as [string, BiText][]
+                  ).map(([label, value]) => (
+                    <div key={label}>
+                      <dt className="text-xs font-semibold uppercase tracking-wider text-ink-subtle mb-0.5">
+                        {label}
+                      </dt>
+                      <dd className="text-ink-muted leading-relaxed">{t(value)}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* Key Screens */}
+        <section className="flex flex-col gap-5">
+          <Step n={step()}>{pick(locale, "Key Screens", "Écrans clés")}</Step>
 
           <div className="flex flex-wrap md:flex-nowrap gap-8 items-start">
             <div className="flex-1">
@@ -569,9 +672,9 @@ export default function HomeLinkSection2({ locale }: { locale: Locale }) {
           </div>
         </section>
 
-        {/* 07 · System States */}
+        {/* System States */}
         <section className="flex flex-col gap-5">
-          <Step n="07">{pick(locale, "System State Management", "Gestion des états système")}</Step>
+          <Step n={step()}>{pick(locale, "System State Management", "Gestion des états système")}</Step>
           <p className="text-ink-muted">
             {pick(
               locale,
@@ -592,9 +695,10 @@ export default function HomeLinkSection2({ locale }: { locale: Locale }) {
           </div>
         </section>
 
-        {/* 07b · Outcomes */}
+
+        {/* Outcomes */}
         <section className="flex flex-col gap-5">
-          <Step n="08">{pick(locale, "Outcomes", "Résultats")}</Step>
+          <Step n={step()}>{pick(locale, "Outcomes", "Résultats")}</Step>
           <Outcomes
             locale={locale}
             criteria={pick(
@@ -633,14 +737,14 @@ export default function HomeLinkSection2({ locale }: { locale: Locale }) {
           />
         </section>
 
-        {/* 09 · Reflections */}
+        {/* Reflections */}
         <section className="flex flex-col gap-5">
-          <Step n="09">{pick(locale, "Reflections & Learnings", "Réflexions & apprentissages")}</Step>
+          <Step n={step()}>{pick(locale, "Reflections & Learnings", "Réflexions & apprentissages")}</Step>
           <p className="text-ink-muted leading-relaxed">
             {pick(
               locale,
-              "HomeLink was the most complex product I've designed to date — not because of the visual challenge, but because of the mental model challenge. Merging commerce, installation, and control into one coherent experience required constant user empathy and ruthless simplification. Every screen had to earn its place.",
-              "HomeLink est le produit le plus complexe que j'aie conçu à ce jour — non pas à cause du défi visuel, mais du défi de modèle mental. Fusionner commerce, installation et contrôle en une expérience cohérente a exigé une empathie constante et une simplification sans concession. Chaque écran devait mériter sa place."
+              "HomeLink was the most complex product I've designed to date — not because of the visual challenge, but because of the mental model challenge. Without access to user testing during the engagement, I compensated with persona-driven walkthroughs and a strict design-system audit — and flagged onboarding and automations as the first flows to validate with real users after launch.",
+              "HomeLink est le produit le plus complexe que j'aie conçu à ce jour — non pas à cause du défi visuel, mais du défi de modèle mental. Sans accès à des tests utilisateurs pendant la mission, j'ai compensé par des parcours guidés par le persona et un audit rigoureux du design system — et j'ai identifié l'onboarding et les automatisations comme premiers parcours à valider avec de vrais utilisateurs après le lancement."
             )}
           </p>
           <p className="text-ink-muted leading-relaxed">
@@ -654,11 +758,11 @@ export default function HomeLinkSection2({ locale }: { locale: Locale }) {
             <p className="font-bold text-ink mb-2">
               {pick(locale, "Key takeaway", "Ce qu'il faut retenir")}
             </p>
-            <p className="text-brand-strong italic">
+            <p className="text-brand-strong font-semibold text-lg leading-relaxed">
               {pick(
                 locale,
-                "“The best product experiences feel like they were always meant to work exactly that way. HomeLink taught me that getting there requires designing for the user's mental model, not the product's technical structure.”",
-                "«Les meilleures expériences produit donnent l'impression d'avoir toujours dû fonctionner exactement ainsi. HomeLink m'a appris qu'y parvenir demande de designer pour le modèle mental de l'utilisateur, pas pour la structure technique du produit.»"
+                "The best product experiences feel like they were always meant to work exactly that way. HomeLink taught me that getting there requires designing for the user's mental model, not the product's technical structure.",
+                "Les meilleures expériences produit donnent l'impression d'avoir toujours dû fonctionner exactement ainsi. HomeLink m'a appris qu'y parvenir demande de designer pour le modèle mental de l'utilisateur, pas pour la structure technique du produit."
               )}
             </p>
           </div>

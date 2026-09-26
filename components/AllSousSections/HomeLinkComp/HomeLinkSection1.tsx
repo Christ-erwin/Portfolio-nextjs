@@ -5,8 +5,8 @@ import { pick, type Locale } from "@/lib/locale";
 export default function HomeLinkSection1({ locale }: { locale: Locale }) {
   const tags = pick(
     locale,
-    ["UX Research", "UI Design", "Prototyping", "iOS & Android", "Design System"],
-    ["Recherche UX", "Design UI", "Prototypage", "iOS & Android", "Design System"]
+    ["Product Discovery", "UI Design", "Prototyping", "iOS & Android", "Design System"],
+    ["Découverte produit", "Design UI", "Prototypage", "iOS & Android", "Design System"]
   );
 
   return (
@@ -23,7 +23,7 @@ export default function HomeLinkSection1({ locale }: { locale: Locale }) {
 
       <div className="relative max-w-6xl w-full mx-auto">
         <span className="inline-block rounded-full border border-white/25 bg-white/15 px-4 py-1.5 text-xs font-semibold text-white backdrop-blur-sm">
-          {pick(locale, "Client Project · Pommy", "Projet client · Pommy")}
+          {pick(locale, "Client Project", "Projet client")}
         </span>
 
         <h1 className="mt-4 text-4xl md:text-6xl font-bold text-white leading-[1.1]">

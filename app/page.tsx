@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import HomeSection1 from "@/components/AllSections/HomeComp/HomeSection1";
 import HomeSection2 from "@/components/AllSections/HomeComp/HomeSection2";
 import HomeSection3 from "@/components/AllSections/HomeComp/HomeSection3";
@@ -5,6 +6,8 @@ import Testimonials from "@/components/Testimonials";
 import SiteCredit from "@/components/SiteCredit";
 import PreFooter from "@/components/PreFooter";
 import { getLocale } from "@/lib/locale.server";
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export default async function Home() {
   const locale = await getLocale();

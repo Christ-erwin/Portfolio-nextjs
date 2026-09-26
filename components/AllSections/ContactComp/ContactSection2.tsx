@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 import { toast } from "react-toastify";
 import { LuMail, LuLinkedin, LuPhone, LuArrowRight } from "react-icons/lu";
@@ -59,6 +59,13 @@ export default function ContactSection2({ locale }: { locale: Locale }) {
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
 
+  // Spam mitigation: a honeypot field bots fill in but humans never see,
+  // plus a minimum time-on-form — no captcha, no extra dependency.
+  const mountedAt = useRef(Date.now());
+  useEffect(() => {
+    mountedAt.current = Date.now();
+  }, []);
+
   const clearError = (name: keyof Errors) =>
     setErrors((prev) => {
       if (!prev[name]) return prev;
@@ -71,10 +78,27 @@ export default function ContactSection2({ locale }: { locale: Locale }) {
     e.preventDefault();
     if (!form.current) return;
 
-    const found = validate(new FormData(form.current), locale);
+    const data = new FormData(form.current);
+    const found = validate(data, locale);
     setErrors(found);
     if (Object.keys(found).length > 0) {
       requestAnimationFrame(() => summaryRef.current?.focus());
+      return;
+    }
+
+    // Bot check: honeypot filled, or submitted implausibly fast. Pretend
+    // success so scripted spam doesn't learn to adapt.
+    const honeypot = String(data.get("company") ?? "").trim();
+    const tooFast = Date.now() - mountedAt.current < 2500;
+    if (honeypot || tooFast) {
+      toast.success(
+        pick(
+          locale,
+          "Message sent — I'll get back to you within 24 hours.",
+          "Message envoyé — je reviens vers vous sous 24 heures."
+        )
+      );
+      form.current.reset();
       return;
     }
 
@@ -157,6 +181,18 @@ export default function ContactSection2({ locale }: { locale: Locale }) {
             noValidate
             className="flex flex-col gap-5"
           >
+            {/* Honeypot — hidden from sighted and AT users, bots fill it in */}
+            <div className="absolute -left-[9999px] w-px h-px overflow-hidden" aria-hidden="true">
+              <label htmlFor="company">Company</label>
+              <input
+                id="company"
+                name="company"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+              />
+            </div>
+
             <div className="grid sm:grid-cols-2 gap-5">
               <div>
                 <label

@@ -23,8 +23,8 @@ export default function ProjectsSection2({ locale }: { locale: Locale }) {
           title="HOMELINK"
           description={pick(
             locale,
-            "Smart home app · Client project — Pommy\nFull product design — research, architecture, UI, prototype",
-            "Application maison connectée · Projet client — Pommy\nDesign produit complet — recherche, architecture, UI, prototype"
+            "Smart home app · Client project\nFull product design — product discovery, architecture, UI, prototype",
+            "Application maison connectée · Projet client\nDesign produit complet — découverte produit, architecture, UI, prototype"
           )}
           link="/projects/homelink"
           featured
@@ -41,6 +41,7 @@ export default function ProjectsSection2({ locale }: { locale: Locale }) {
               "Refonte conceptuelle non sollicitée\nAuto-initié · Fintech · Non affilié à Wave"
             )}
             link="/projects/wave"
+            badge={pick(locale, "Concept redesign", "Concept de refonte")}
           />
           <BoxProject
             locale={locale}

@@ -13,6 +13,14 @@ const PHOTO_ID =
 const AVATAR_PHOTO = `https://res.cloudinary.com/docanichi/image/upload/f_auto,q_auto,c_fill,g_auto,w_96,h_96/${PHOTO_ID}`;
 const PORTRAIT_PHOTO = `https://res.cloudinary.com/docanichi/image/upload/f_auto,q_auto,c_fill,g_auto,w_768,h_768/${PHOTO_ID}`;
 
+type Stat = { value: string; label: { en: string; fr: string } };
+
+const STATS: Stat[] = [
+  { value: "4+", label: { en: "Years experience", fr: "Ans d'expérience" } },
+  { value: "10+", label: { en: "Projects delivered", fr: "Projets livrés" } },
+  { value: "4", label: { en: "Companies", fr: "Entreprises" } },
+];
+
 export default function HomeSection1({ locale }: { locale: Locale }) {
   const reduceMotion = useReducedMotion();
   const rise = (delay: number) =>
@@ -24,11 +32,10 @@ export default function HomeSection1({ locale }: { locale: Locale }) {
           transition: { duration: 0.6, delay, ease: "easeOut" as const },
         };
 
-  const stats = [
-    { value: "4+", label: pick(locale, "Years experience", "Ans d'expérience") },
-    { value: "10+", label: pick(locale, "Projects delivered", "Projets livrés") },
-    { value: "4", label: pick(locale, "Companies", "Entreprises") },
-  ];
+  const stats = STATS.map((s) => ({
+    value: s.value,
+    label: pick(locale, s.label.en, s.label.fr),
+  }));
 
   return (
     <section className="w-full min-h-[calc(100vh-4rem)] flex items-center justify-center px-6 pt-24 pb-16 bg-surface">

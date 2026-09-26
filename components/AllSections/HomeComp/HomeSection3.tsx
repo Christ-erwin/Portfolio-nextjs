@@ -31,12 +31,11 @@ export default function HomeSection3({ locale }: { locale: Locale }) {
             title="HOMELINK"
             description={pick(
               locale,
-              "Smart Home App · Pommy\nFull product design — UX research to final UI",
-              "Application maison connectée · Pommy\nDesign produit complet — de la recherche UX à l'UI finale"
+              "Smart Home App · Client project\nFull product design — product discovery to final UI",
+              "Application maison connectée · Projet client\nDesign produit complet — de la découverte produit à l'UI finale"
             )}
             link="/projects/homelink"
             featured
-            priority
           />
           <div className="grid md:grid-cols-2 gap-6">
             <BoxProject
@@ -49,6 +48,7 @@ export default function HomeSection3({ locale }: { locale: Locale }) {
                 "Refonte conceptuelle non sollicitée\nNon affilié à Wave · Fintech"
               )}
               link="/projects/wave"
+              badge={pick(locale, "Concept redesign", "Concept de refonte")}
             />
             <BoxProject
               locale={locale}

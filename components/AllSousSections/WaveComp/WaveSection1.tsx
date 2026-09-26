@@ -5,10 +5,11 @@ import { pick, type Locale } from "@/lib/locale";
 export default function WaveSection1({ locale }: { locale: Locale }) {
   return (
     <PageHero
+      badge={pick(locale, "Concept redesign", "Concept de refonte")}
       eyebrow={pick(
         locale,
-        "Unsolicited Concept Redesign · Fintech",
-        "Refonte conceptuelle non sollicitée · Fintech"
+        "Unsolicited · Self-initiated · Fintech",
+        "Non sollicité · Auto-initié · Fintech"
       )}
       priority
       image="https://res.cloudinary.com/docanichi/image/upload/v1752175194/coverWaveBg_iyypz9.jpg"
