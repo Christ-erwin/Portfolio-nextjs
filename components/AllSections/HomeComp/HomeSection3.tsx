@@ -45,8 +45,8 @@ export default function HomeSection3({ locale }: { locale: Locale }) {
               title="WAVE"
               description={pick(
                 locale,
-                "Mobile money app redesign\nPopular across West Africa",
-                "Refonte d'une app mobile money\nPopulaire en Afrique de l'Ouest"
+                "Unsolicited concept redesign\nNot affiliated with Wave · Fintech",
+                "Refonte conceptuelle non sollicitée\nNon affilié à Wave · Fintech"
               )}
               link="/projects/wave"
             />

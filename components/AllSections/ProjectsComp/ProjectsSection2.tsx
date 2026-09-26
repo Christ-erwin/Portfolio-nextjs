@@ -37,8 +37,8 @@ export default function ProjectsSection2({ locale }: { locale: Locale }) {
             title="WAVE"
             description={pick(
               locale,
-              "Mobile-money redesign concept\nSelf-initiated · Fintech · UX audit + redesign",
-              "Concept de refonte mobile-money\nAuto-initié · Fintech · Audit UX + refonte"
+              "Unsolicited concept redesign\nSelf-initiated · Fintech · Not affiliated with Wave",
+              "Refonte conceptuelle non sollicitée\nAuto-initié · Fintech · Non affilié à Wave"
             )}
             link="/projects/wave"
           />

@@ -6,6 +6,8 @@ import "./globals.css";
 import AppWrapper from "@/components/AppWrapper";
 import { getLocale } from "@/lib/locale.server";
 import { pick } from "@/lib/locale";
+import { SITE_URL } from "@/lib/site";
+import { OG_ALT, OG_SIZE } from "@/lib/og-image";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -14,7 +16,7 @@ const outfit = Outfit({
   display: "swap",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const siteUrl = SITE_URL;
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -64,11 +66,13 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: "Christ Erwin Fram",
       title,
       description: shortDescription,
+      images: [{ url: "/opengraph-image", width: OG_SIZE.width, height: OG_SIZE.height, alt: OG_ALT }],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description: shortDescription,
+      images: [{ url: "/twitter-image", width: OG_SIZE.width, height: OG_SIZE.height, alt: OG_ALT }],
     },
     robots: { index: true, follow: true },
   };

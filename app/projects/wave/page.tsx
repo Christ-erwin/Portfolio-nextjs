@@ -10,13 +10,13 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: pick(
       locale,
-      "Wave — Mobile Money Redesign",
-      "Wave — Refonte mobile money"
+      "Wave — Unsolicited Concept Redesign",
+      "Wave — Refonte conceptuelle non sollicitée"
     ),
     description: pick(
       locale,
-      "UX audit and UI redesign of a mobile money app trusted by millions across West Africa.",
-      "Audit UX et refonte UI d'une application mobile money utilisée par des millions de personnes en Afrique de l'Ouest."
+      "An unsolicited concept redesign of a mobile money app used by millions across West Africa — not affiliated with or endorsed by Wave.",
+      "Une refonte conceptuelle non sollicitée d'une application mobile money utilisée par des millions de personnes en Afrique de l'Ouest — non affiliée à Wave."
     ),
   };
 }

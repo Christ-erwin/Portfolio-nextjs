@@ -7,24 +7,22 @@ export default function WaveSection1({ locale }: { locale: Locale }) {
     <PageHero
       eyebrow={pick(
         locale,
-        "Personal Project · Fintech · Redesign",
-        "Projet personnel · Fintech · Refonte"
+        "Unsolicited Concept Redesign · Fintech",
+        "Refonte conceptuelle non sollicitée · Fintech"
       )}
       priority
       image="https://res.cloudinary.com/docanichi/image/upload/v1752175194/coverWaveBg_iyypz9.jpg"
       title="Wave"
       subtitle={pick(
         locale,
-        "Redesigning a mobile money app trusted by millions across West Africa.",
-        "Refonte d'une application mobile money utilisée par des millions de personnes en Afrique de l'Ouest."
+        "An unsolicited concept redesign of a mobile money app used by millions across West Africa — not affiliated with or endorsed by Wave.",
+        "Une refonte conceptuelle non sollicitée d'une application mobile money utilisée par des millions de personnes en Afrique de l'Ouest — non affiliée à Wave et non approuvée par Wave."
       )}
-      tags={
-        pick(
-          locale,
-          ["UX Audit", "UI Redesign", "Mobile", "Figma", "Fintech"],
-          ["Audit UX", "Refonte UI", "Mobile", "Figma", "Fintech"]
-        )
-      }
+      tags={pick(
+        locale,
+        ["Concept Redesign", "UX Audit", "Mobile", "Figma", "Fintech"],
+        ["Refonte conceptuelle", "Audit UX", "Mobile", "Figma", "Fintech"]
+      )}
     />
   );
 }

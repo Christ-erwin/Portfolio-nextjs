@@ -6,8 +6,12 @@ import { LuPalette, LuCodeXml, LuGlobe, LuMapPin } from "react-icons/lu";
 import { FcGoogle } from "react-icons/fc";
 import { pick, type Locale } from "@/lib/locale";
 
-const PHOTO =
-  "https://res.cloudinary.com/docanichi/image/upload/v1789246164/66F78270-AA55-4D3A-8BD9-2DCCA7288143_elif3h.png";
+// Source file is a 2 MB PNG — request pre-sized, auto-compressed variants
+// from Cloudinary instead of shipping the original twice (avatar + portrait).
+const PHOTO_ID =
+  "v1789246164/66F78270-AA55-4D3A-8BD9-2DCCA7288143_elif3h.png";
+const AVATAR_PHOTO = `https://res.cloudinary.com/docanichi/image/upload/f_auto,q_auto,c_fill,g_auto,w_96,h_96/${PHOTO_ID}`;
+const PORTRAIT_PHOTO = `https://res.cloudinary.com/docanichi/image/upload/f_auto,q_auto,c_fill,g_auto,w_768,h_768/${PHOTO_ID}`;
 
 export default function HomeSection1({ locale }: { locale: Locale }) {
   const reduceMotion = useReducedMotion();
@@ -33,7 +37,7 @@ export default function HomeSection1({ locale }: { locale: Locale }) {
         <motion.div className="flex flex-col gap-6" {...rise(0)}>
           <div className="flex items-center gap-2.5">
             <span className="relative w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
-              <Image src={PHOTO} alt="" fill sizes="32px" className="object-cover" />
+              <Image src={AVATAR_PHOTO} alt="" fill sizes="32px" className="object-cover" />
             </span>
             <span className="text-sm text-ink-subtle font-medium">
               {pick(locale, "Available for remote work", "Disponible en remote")}
@@ -117,7 +121,7 @@ export default function HomeSection1({ locale }: { locale: Locale }) {
           <div className="relative">
             <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-3xl overflow-hidden border-4 border-white shadow-2xl">
               <Image
-                src={PHOTO}
+                src={PORTRAIT_PHOTO}
                 alt={pick(
                   locale,
                   "Portrait of Christ Erwin Fram",
